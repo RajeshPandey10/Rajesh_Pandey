@@ -5,6 +5,17 @@ import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+     <AuthProvider>
+      <Router>
+        {loading ? (
+          <Loader />
+        ) : (
+          <Suspense fallback={<Loader />}>
+           <App />
+          </Suspense>
+        )}
+      </Router>
+    </AuthProvider>
+    
   </StrictMode>,
 )

@@ -18,8 +18,17 @@ const AdminDashboard = lazy(() => import('./admin/AdminDashboard'));
 const ManageProjects = lazy(() => import('./admin/ManageProjects'));
 const Login = lazy(() => import('./admin/Login'));
 
-const AppContent = () => {
+const App = () => {
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); // 2 seconds countdown
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Hide Header for Admin Routes
   const hideHeader = location.pathname.startsWith('/admin');
@@ -57,30 +66,5 @@ const AppContent = () => {
   );
 };
 
-const App = () => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000); // 2 seconds countdown
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <AuthProvider>
-      <Router>
-        {loading ? (
-          <Loader />
-        ) : (
-          <Suspense fallback={<Loader />}>
-            <AppContent />
-          </Suspense>
-        )}
-      </Router>
-    </AuthProvider>
-  );
-};
 
 export default App;
