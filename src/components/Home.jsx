@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import img from '../assets/myPhoto.png';
+import img from '../assets/myphoto.png';
 import hoverImg from '../assets/mymainphoto.png';
 import { TypeAnimation } from 'react-type-animation';
 import SocialIcons from './SocialIcons';
