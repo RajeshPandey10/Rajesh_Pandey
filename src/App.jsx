@@ -33,14 +33,7 @@ const App = () => {
     <div className="bg-black text-white">
       {!hideHeader && <Header />}
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/skills" element={<Skills />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/experience" element={<Experience />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
-      <Routes>
+        
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
