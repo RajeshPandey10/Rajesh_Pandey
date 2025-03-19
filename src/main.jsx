@@ -11,13 +11,11 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
      <AuthProvider>
       <Router>
-        {loading ? (
-          <Loader />
-        ) : (
+      
           <Suspense fallback={<Loader />}>
            <App />
           </Suspense>
-        )}
+      
       </Router>
     </AuthProvider>
     

@@ -20,15 +20,7 @@ const Login = lazy(() => import('./admin/Login'));
 
 const App = () => {
   const location = useLocation();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000); // 2 seconds countdown
-
-    return () => clearTimeout(timer);
-  }, []);
+ 
 
   // Hide Header for Admin Routes
   const hideHeader = location.pathname.startsWith('/admin');
