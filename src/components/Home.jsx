@@ -47,13 +47,13 @@ const Home = () => {
             <img
               src={currentImg}
               alt="rajesh"
-              className="rounded-full sm:mb-20 w-96 sm:w-64 md:w-80 lg:w-[350px] xl:w-[400px] shadow-[0_0_15px_3px_rgba(222,205,205,0.8)] transition-colors duration-300 hover:shadow-[0_0_15px_3px_rgba(255,0,0,0.8)] "
+              className="rounded-full sm:mb-20 w-80 sm:w-64 md:w-80 lg:w-[350px] xl:w-[400px] shadow-[0_0_15px_3px_rgba(222,205,205,0.8)] transition-colors duration-300 hover:shadow-[0_0_15px_3px_rgba(255,0,0,0.8)] "
             />
           </div>
         </div>
         <div className="md:w-1/2 text-center md:text-left mt-6 md:mt-0 p-4">
           <Fade direction="up">
-            <h1 className="text-4x sm:text-6xl font-bold mb-4 ">
+            <h1 className="text-4xl sm:text-6xl font-bold mb-4 ">
               Hi,It's <span className="uppercase text-red-500">Rajesh</span>
             </h1>
             <h3 className="text-2xl sm:text-3xl font-semibold mb-4 ml-1">
