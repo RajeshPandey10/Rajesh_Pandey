@@ -62,11 +62,36 @@ const ManageContacts = () => {
 
 const AdminDashboard = () => {
   const { logout } = useContext(AuthContext);
+  const [contacts, setContacts] = useState([]);
+  const [newContacts, setNewContacts] = useState(0);
 
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully!");
   };
+
+  useEffect(() => {
+    const loadContacts = async () => {
+      try {
+        const data = await fetchContacts();
+        setContacts(data);
+
+        // Check for new contacts
+        if (data.length > contacts.length) {
+          const newCount = data.length - contacts.length;
+          setNewContacts(newCount);
+          toast.info(`You have ${newCount} new contact(s)!`);
+        }
+      } catch (error) {
+        console.error("Error fetching contacts:", error);
+        toast.error("Failed to fetch contacts.");
+      }
+    };
+
+    // Poll every 30 seconds
+    const interval = setInterval(loadContacts, 30000);
+    return () => clearInterval(interval);
+  }, [contacts]);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -82,10 +107,8 @@ const AdminDashboard = () => {
         </div>
       </header>
       <div className="container mx-auto p-6">
-       
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
           <Routes>
-         
             <Route
               index
               element={
@@ -93,34 +116,33 @@ const AdminDashboard = () => {
                   <h2 className="text-3xl font-bold mb-4">
                     Welcome to the Admin Dashboard
                   </h2>
-                
+                  {newContacts > 0 && (
+                    <p className="text-green-500">
+                      You have {newContacts} new contact(s)!
+                    </p>
+                  )}
                 </div>
               }
             />
-               <Route path="projects" element={<ManageProjects />} />
-               <Route path="contacts" element={<ManageContacts />} />
+            <Route path="projects" element={<ManageProjects />} />
+            <Route path="contacts" element={<ManageContacts />} />
           </Routes>
-          
-          <div>
           <nav className="mb-6 flex space-x-4">
-          <Link
-            to="projects"
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-300"
-          >
-            Manage Projects
-          </Link>
-          <Link
-            to="contacts"
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition duration-300"
-          >
-            Manage Contacts
-          </Link>
-        </nav>
-          </div>
+            <Link
+              to="projects"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-300"
+            >
+              Manage Projects
+            </Link>
+            <Link
+              to="contacts"
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition duration-300"
+            >
+              Manage Contacts
+            </Link>
+          </nav>
         </div>
-        
       </div>
-      
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );

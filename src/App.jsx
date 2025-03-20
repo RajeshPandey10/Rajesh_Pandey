@@ -48,13 +48,13 @@ const App = () => {
         <Route
           path="/admin/*"
           element={
-         
+            <ProtectedRoute>
               <Routes>
                 <Route index element={<AdminDashboard />} />
                 <Route path="projects" element={<ManageProjects />} />
                 <Route path="contacts" element={<ManageContacts />} />
               </Routes>
-            
+            </ProtectedRoute>
           }
         />
       </Routes>
