@@ -62,6 +62,10 @@ export const replyToContact = async (email, response, token) => {
     throw error;
   }
 };
+export const deleteContact = async (id, token) => {
+  await axios.delete(`${API_BASE_URL}/contacts/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });};
 
 // Submit the contact form
 export const submitContactForm = async (formData) => {

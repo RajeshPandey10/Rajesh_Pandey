@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { fetchContacts, replyToContact } from "../services/api";
+import { fetchContacts, replyToContact, deleteContact } from "../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "../context/AuthContext";
@@ -40,6 +40,21 @@ const ManageContacts = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this contact?")) {
+      return;
+    }
+
+    try {
+      await deleteContact(id, adminToken);
+      setContacts(contacts.filter((contact) => contact._id !== id));
+      toast.success("Contact deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting contact:", error);
+      toast.error("Failed to delete contact.");
+    }
+  };
+
   return (
     <div className="p-6 bg-gray-900 min-h-screen text-white">
       <h3 className="text-3xl font-bold mb-6 text-center">Manage Contacts</h3>
@@ -56,12 +71,20 @@ const ManageContacts = () => {
             <p className="text-sm text-gray-400 mb-4">
               <span className="font-semibold">Message:</span> {contact.message}
             </p>
-            <button
-              onClick={() => setSelectedContact(contact)}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300"
-            >
-              Reply
-            </button>
+            <div className="flex justify-between">
+              <button
+                onClick={() => setSelectedContact(contact)}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300"
+              >
+                Reply
+              </button>
+              <button
+                onClick={() => handleDelete(contact._id)}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>

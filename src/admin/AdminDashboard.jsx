@@ -63,7 +63,7 @@ const ManageContacts = () => {
 const AdminDashboard = () => {
   const { logout } = useContext(AuthContext);
   const [contacts, setContacts] = useState([]);
-  const [newContacts, setNewContacts] = useState(0);
+  const [newContacts, setNewContacts] = useState([]);
 
   const handleLogout = () => {
     logout();
@@ -76,11 +76,12 @@ const AdminDashboard = () => {
         const data = await fetchContacts();
         setContacts(data);
 
-        // Check for new contacts
-        if (data.length > contacts.length) {
-          const newCount = data.length - contacts.length;
-          setNewContacts(newCount);
-          toast.info(`You have ${newCount} new contact(s)!`);
+        // Filter new/unviewed contacts
+        const unviewedContacts = data.filter((contact) => !contact.viewed);
+        setNewContacts(unviewedContacts);
+
+        if (unviewedContacts.length > 0) {
+          toast.info(`You have ${unviewedContacts.length} new contact(s)!`);
         }
       } catch (error) {
         console.error("Error fetching contacts:", error);
@@ -91,7 +92,7 @@ const AdminDashboard = () => {
     // Poll every 30 seconds
     const interval = setInterval(loadContacts, 30000);
     return () => clearInterval(interval);
-  }, [contacts]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -108,6 +109,27 @@ const AdminDashboard = () => {
       </header>
       <div className="container mx-auto p-6">
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+          {/* New Contacts Section */}
+          {newContacts.length > 0 && (
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold mb-4 text-green-500">
+                New Contacts
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {newContacts.map((contact) => (
+                  <div
+                    key={contact._id}
+                    className="bg-green-700 p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300"
+                  >
+                    <h4 className="text-lg font-bold">{contact.name}</h4>
+                    <p className="text-sm text-gray-200">{contact.email}</p>
+                    <p className="text-sm text-gray-200">{contact.message}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <Routes>
             <Route
               index
@@ -116,9 +138,9 @@ const AdminDashboard = () => {
                   <h2 className="text-3xl font-bold mb-4">
                     Welcome to the Admin Dashboard
                   </h2>
-                  {newContacts > 0 && (
+                  {newContacts.length > 0 && (
                     <p className="text-green-500">
-                      You have {newContacts} new contact(s)!
+                      You have {newContacts.length} new contact(s)!
                     </p>
                   )}
                 </div>
