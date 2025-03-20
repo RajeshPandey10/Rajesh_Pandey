@@ -9,4 +9,19 @@ export default defineConfig({
   server: {
     open: true, // Automatically open the browser
   },
+  esbuild: {
+    loader: 'jsx',
+  },
+  resolve: {
+    alias: {
+      './runtimeConfig': './runtimeConfig.browser',
+    },
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.js': 'jsx',
+      },
+    },
+  },
 });
