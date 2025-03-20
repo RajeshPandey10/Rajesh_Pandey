@@ -29,11 +29,11 @@ const App = () => {
   // Hide Header for Admin Routes
   const hideHeader = location.pathname.startsWith("/admin");
   const hideFooter = location.pathname.startsWith("/admin");
+
   return (
     <div className="bg-black text-white">
       {!hideHeader && <Header />}
       <Routes>
-        
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
