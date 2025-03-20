@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { Suspense, lazy } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -10,7 +10,6 @@ import Header from "./components/Header";
 import Loader from "./components/Loader";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-import ManageContacts from "./admin/ManageContacts";
 import Footer from "./components/Footer";
 
 const Home = lazy(() => import("./components/Home"));
@@ -21,6 +20,7 @@ const Experience = lazy(() => import("./components/Experience"));
 const Contact = lazy(() => import("./components/Contact"));
 const AdminDashboard = lazy(() => import("./admin/AdminDashboard"));
 const ManageProjects = lazy(() => import("./admin/ManageProjects"));
+const ManageContacts = lazy(() => import("./admin/ManageContacts"));
 const Login = lazy(() => import("./admin/Login"));
 
 const App = () => {
@@ -33,31 +33,33 @@ const App = () => {
   return (
     <div className="bg-black text-white">
       {!hideHeader && <Header />}
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/skills" element={<Skills />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/experience" element={<Experience />} />
-        <Route path="/contact" element={<Contact />} />
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/skills" element={<Skills />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/experience" element={<Experience />} />
+          <Route path="/contact" element={<Contact />} />
 
-        {/* Admin Routes */}
-        <Route path="/admin/login" element={<Login />} />
-        <Route
-          path="/admin/*"
-          element={
-            <ProtectedRoute>
-              <Routes>
-                <Route index element={<AdminDashboard />} />
-                <Route path="projects" element={<ManageProjects />} />
-                <Route path="contacts" element={<ManageContacts />} />
-              </Routes>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<Login />} />
+          <Route
+            path="/admin/*"
+            element={
+              <ProtectedRoute>
+                <Routes>
+                  <Route index element={<AdminDashboard />} />
+                  <Route path="projects" element={<ManageProjects />} />
+                  <Route path="contacts" element={<ManageContacts />} />
+                </Routes>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Suspense>
       {!hideFooter && <Footer />}
     </div>
   );

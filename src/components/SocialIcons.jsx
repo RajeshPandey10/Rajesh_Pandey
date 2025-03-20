@@ -4,20 +4,20 @@ import { FaLinkedin, FaFacebook, FaGithub, FaInstagram } from "react-icons/fa";
 const SocialIcons = () => {
   const icons = [
     {
-      href: "https://www.linkedin.com",
+      href: "https://www.linkedin.com/in/rajesh-pandey-915649286/",
       component: <FaLinkedin />,
     },
     {
-      href: "https://www.facebook.com",
+      href: "https://www.facebook.com/profile.php?id=100065321473452",
       component: <FaFacebook />,
     },
    
     {
-      href: "https://www.github.com",
+      href: "https://github.com/RajeshPandey10",
       component: <FaGithub />,
     },
     {
-      href: "https://www.instagram.com",
+      href: "https://www.instagram.com/rajesh_pandey1/",
       component: <FaInstagram />,
     },
   ];
