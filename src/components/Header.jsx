@@ -32,7 +32,13 @@ const Header = () => {
 
   return (
     <div className=" flex justify-between px-4 items-center bg-black w-full h-20 sticky top-0 z-50">
-      <div className="text-3xl ml-2 hover:scale-110 text-red-500 font-extrabold">RAJESH</div>
+      <div className="text-3xl ml-2 hover:scale-110 text-red-500 font-extrabold">
+      <Link
+            to="/admin/login"
+          >
+            RAJESH
+          </Link>
+      </div>
 
       {/* Desktop Menu */}
       <ul className="hidden md:flex ">

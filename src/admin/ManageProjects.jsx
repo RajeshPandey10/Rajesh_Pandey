@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchProjects, addProject, deleteProject } from "../services/api";
+import { fetchProjects, addProject, deleteProject, updateProject } from "../services/api";
 import { getImageUrl } from "../utils/imageUtils";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,11 +9,11 @@ const ManageProjects = () => {
   const [newProject, setNewProject] = useState({
     title: "",
     description: "",
-    link: "",
     demoLink: "",
     githubLink: "",
   });
   const [image, setImage] = useState(null);
+  const [editingProject, setEditingProject] = useState(null); // Track the project being edited
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -28,25 +28,50 @@ const ManageProjects = () => {
     loadProjects();
   }, []);
 
-  const handleAddProject = async () => {
+  const handleAddOrUpdateProject = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const project = { ...newProject, image };
-      const data = await addProject(project, token);
-      setProjects([...projects, data]);
+
+      if (editingProject) {
+        // Update existing project
+        const updatedProject = { ...newProject, image };
+        const data = await updateProject(editingProject._id, updatedProject, token);
+        setProjects(
+          projects.map((proj) => (proj._id === editingProject._id ? data : proj))
+        );
+        toast.success("Project updated successfully!");
+      } else {
+        // Add new project
+        const project = { ...newProject, image };
+        const data = await addProject(project, token);
+        setProjects([...projects, data]);
+        toast.success("Project added successfully!");
+      }
+
+      // Reset form
       setNewProject({
         title: "",
         description: "",
-        link: "",
         demoLink: "",
         githubLink: "",
       });
       setImage(null);
-      toast.success("Project added successfully!");
+      setEditingProject(null);
     } catch (error) {
-      console.error("Error adding project:", error);
-      toast.error("Failed to add project.");
+      console.error("Error adding/updating project:", error);
+      toast.error("Failed to add/update project.");
     }
+  };
+
+  const handleEditProject = (project) => {
+    setEditingProject(project);
+    setNewProject({
+      title: project.title,
+      description: project.description,
+      demoLink: project.demoLink,
+      githubLink: project.githubLink,
+    });
+    setImage(null); // Reset image input (optional)
   };
 
   const handleDeleteProject = async (id) => {
@@ -65,9 +90,11 @@ const ManageProjects = () => {
     <div className="p-6 bg-gray-900 min-h-screen text-white">
       <h3 className="text-3xl font-bold mb-6 text-center">Manage Projects</h3>
 
-      {/* Add Project Form */}
+      {/* Add/Update Project Form */}
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
-        <h4 className="text-xl font-semibold mb-4">Add New Project</h4>
+        <h4 className="text-xl font-semibold mb-4">
+          {editingProject ? "Edit Project" : "Add New Project"}
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             type="text"
@@ -112,10 +139,10 @@ const ManageProjects = () => {
           />
         </div>
         <button
-          onClick={handleAddProject}
+          onClick={handleAddOrUpdateProject}
           className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded transition duration-300"
         >
-          Add Project
+          {editingProject ? "Update Project" : "Add Project"}
         </button>
       </div>
 
@@ -139,12 +166,12 @@ const ManageProjects = () => {
               </p>
               <div className="flex justify-between items-center">
                 <a
-                  href={project.link}
+                  href={project.demoLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-500 hover:underline"
                 >
-                  View Project
+                  Demo
                 </a>
                 <a
                   href={project.githubLink}
@@ -155,12 +182,20 @@ const ManageProjects = () => {
                   GitHub
                 </a>
               </div>
-              <button
-                onClick={() => handleDeleteProject(project._id)}
-                className="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300"
-              >
-                Delete
-              </button>
+              <div className="flex justify-between mt-4">
+                <button
+                  onClick={() => handleEditProject(project)}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded transition duration-300"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDeleteProject(project._id)}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>

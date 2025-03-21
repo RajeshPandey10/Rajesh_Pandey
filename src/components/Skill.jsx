@@ -82,9 +82,12 @@ const Skills = () => {
           modules={[Autoplay, Pagination]}
           spaceBetween={30}
           slidesPerView={3}
-          pagination={{ clickable: false }}
+          pagination={{
+            clickable: true,
+            el: ".swiper-pagination", // Attach pagination to a custom element
+          }}
           loop={true}
-          autoplay={{ delay: 1, disableOnInteraction: true }}
+          autoplay={{ disableOnInteraction: false }} // Auto-swipe everywhere
           speed={1500}
           breakpoints={{
             320: {
@@ -109,7 +112,7 @@ const Skills = () => {
         >
           {skillData.map((skill, index) => (
             <SwiperSlide key={index}>
-              <div className="bg-gray-800 p-6 rounded-lg hover:bg-red-300 hover:text-black transition-colors duration-500 flex flex-col items-center">
+              <div className="bg-gray-800 p-6 rounded-lg hover:bg-red-300 hover:text-black transition-colors duration-500 flex flex-col items-center h-full">
                 <img
                   src={skill.image}
                   alt={`${skill.name} Icon`}
@@ -121,6 +124,7 @@ const Skills = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+   
       </div>
     </section>
   );

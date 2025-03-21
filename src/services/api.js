@@ -20,6 +20,25 @@ export const addProject = async (project, token) => {
   });
   return response.data;
 };
+// Update an existing project
+export const updateProject = async (id, project, token) => {
+  const formData = new FormData();
+  formData.append("title", project.title);
+  formData.append("description", project.description);
+  formData.append("demoLink", project.demoLink);
+  formData.append("githubLink", project.githubLink);
+  if (project.image) {
+    formData.append("image", project.image);
+  }
+
+  const response = await axios.put(`${API_BASE_URL}/admin/projects/${id}`, formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
 
 export const deleteProject = async (id, token) => {
   const response = await axios.delete(`${API_BASE_URL}/admin/projects/${id}`, {

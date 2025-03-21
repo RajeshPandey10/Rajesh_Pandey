@@ -24,15 +24,7 @@ const Footer = () => {
           © {new Date().getFullYear()} Rajesh Pandey. All rights reserved.
         </p>
 
-        {/* Admin Login Link */}
-        <div className="mt-4">
-          <Link
-            to="/admin/login"
-            className="text-gray-400 hover:text-red-500 transition-colors duration-300"
-          >
-            Admin Login
-          </Link>
-        </div>
+      
       </div>
     </footer>
   );
