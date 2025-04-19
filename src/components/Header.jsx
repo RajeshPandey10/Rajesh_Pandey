@@ -132,13 +132,6 @@ const Header = () => {
         )}
       </AnimatePresence>
 
-      {/* Navigation indicator - always visible */}
-      <motion.div
-        className="hidden md:block absolute bottom-0 left-0 h-1 bg-red-500"
-        initial={{ width: "0%" }}
-        animate={{ width: "100%" }}
-        transition={{ duration: 0.6 }}
-      />
     </motion.div>
   );
 };

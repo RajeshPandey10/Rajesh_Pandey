@@ -16,18 +16,6 @@ const Home = () => {
   const [currentImg, setCurrentImg] = useState(img);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const heroSection = document.getElementById("hero");
-      const heroHeight = heroSection?.offsetHeight || 0;
-      const scrollPosition = window.scrollY;
-
-      setShowScrollTop(scrollPosition > heroHeight);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -36,7 +24,7 @@ const Home = () => {
   return (
     <>
       <section
-        id="hero"
+        id="home"
         className="flex bg-gray-900 flex-col md:flex-row items-center justify-center overflow-hidden min-h-screen py-10"
       >
         <div className="md:w-1/2 flex justify-center transition-all duration-300 mb-6 md:mb-0">
