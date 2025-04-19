@@ -37,7 +37,7 @@ const Home = () => {
     <>
       <section
         id="hero"
-        className="flex flex-col md:flex-row items-center justify-center overflow-hidden min-h-screen py-10"
+        className="flex bg-gray-900 flex-col md:flex-row items-center justify-center overflow-hidden min-h-screen py-10"
       >
         <div className="md:w-1/2 flex justify-center transition-all duration-300 mb-6 md:mb-0">
           <div

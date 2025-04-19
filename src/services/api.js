@@ -7,29 +7,24 @@ export const fetchProjects = async () => {
   return response.data;
 };
 
-export const addProject = async (project, token) => {
+export const addProject = async (projectData) => {
   const formData = new FormData();
-  Object.keys(project).forEach((key) => {
-    formData.append(key, project[key]);
-  });
-  const response = await axios.post(`${API_BASE_URL}/admin/projects`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      Authorization: `Bearer ${token}`,
-    },
+  for (const key in projectData) {
+    formData.append(key, projectData[key]);
+  }
+
+  const response = await axios.post(`${API_BASE_URL}/projects`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
   return response.data;
 };
+
 // Update an existing project
 export const updateProject = async (id, project, token) => {
   const formData = new FormData();
-  formData.append("title", project.title);
-  formData.append("description", project.description);
-  formData.append("demoLink", project.demoLink);
-  formData.append("githubLink", project.githubLink);
-  if (project.image) {
-    formData.append("image", project.image);
-  }
+  Object.entries(project).forEach(([key, value]) => {
+    if (value) formData.append(key, value); // Append only non-empty fields
+  });
 
   const response = await axios.put(`${API_BASE_URL}/admin/projects/${id}`, formData, {
     headers: {

@@ -12,7 +12,7 @@ const About = () => {
 
   return (
     <section>
-    <div id='about' className="about-section bg-black text-white py-28 px-8 lg:px-16">
+    <div id='about' className="about-section bg-gray-900 text-gray-200 py-28 px-8 lg:px-16">
       <div className="max-w-6xl mx-auto text-center">
         <h2 className="text-orange-500 text-3xl lg:text-5xl font-bold mb-8" data-aos="fade-up">
           About Me

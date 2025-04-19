@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchProjects } from "../services/api";
 import { getImageUrl } from "../utils/imageUtils";
-import { Fade } from 'react-awesome-reveal';
+import { Fade } from "react-awesome-reveal";
 
 const Portfolio = () => {
   const [projects, setProjects] = useState([]);
@@ -21,7 +21,7 @@ const Portfolio = () => {
         {projects.map((project) => (
           <Fade key={project._id} direction="up" triggerOnce>
             <div
-              className="bg-gray-800 p-4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-2xl"
+              className="bg-gray-800 p-4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-2xl min-h-[450px] flex flex-col justify-between"
             >
               <img
                 src={getImageUrl(project.image)}
@@ -30,7 +30,7 @@ const Portfolio = () => {
               />
               <h3 className="text-2xl font-semibold mb-2">{project.title}</h3>
               <p className="text-sm text-gray-400 mb-4">{project.description}</p>
-              <div className="flex justify-between">
+              <div className="flex justify-between mt-auto">
                 {project.demoLink && (
                   <a
                     href={project.demoLink}
