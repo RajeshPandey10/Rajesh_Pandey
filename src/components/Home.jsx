@@ -87,7 +87,7 @@ const Home = () => {
               practical experience in the field.
             </p>
             <div className="flex flex-col sm:flex-row justify-center sm:justify-start gap-4">
-              <Button text="Hire Me" href="#contact" />
+              <Button text="Hire Me" href="/contact" />
               <Button
                 text="View Resume"
                 href="/assets/RajeshPandey-Resume.pdf"
@@ -101,11 +101,7 @@ const Home = () => {
          
         </div>
       </section>
-      <About />
-      <Skills />
-      <Portfolio />
-      <Experience />
-      <Contact />
+    
       <button
         onClick={scrollToTop}
         className={`fixed bottom-4 right-4 z-50 p-3 rounded-full bg-red-500 text-white shadow-lg hover:bg-red-700 transition-all duration-300 ${
