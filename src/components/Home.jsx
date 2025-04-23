@@ -42,6 +42,26 @@ const Home = () => {
     window.open(resumeUrl, "_blank");
   };
 
+  // Function to render proper resume button based on device type
+  const renderResumeButton = () => {
+    const isMobile =
+      /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(
+        navigator.userAgent
+      ) || window.innerWidth < 768;
+
+    if (isMobile) {
+      return <Button text="View Resume" href={resumeUrl} download={true} />;
+    } else {
+      return (
+        <Button
+          text="View Resume"
+          onClick={() => setShowResumeModal(true)}
+          type="button"
+        />
+      );
+    }
+  };
+
   return (
     <>
       <section
@@ -97,11 +117,7 @@ const Home = () => {
             </p>
             <div className="flex flex-col sm:flex-row justify-center sm:justify-start gap-4">
               <Button text="Hire Me" href="/contact" />
-              <Button
-                text="View Resume"
-                onClick={() => setShowResumeModal(true)}
-                type="button"
-              />
+              {renderResumeButton()}
             </div>
             <div className="py-8 m-2">
               <SocialIcons />
