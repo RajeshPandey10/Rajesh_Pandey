@@ -4,62 +4,21 @@ import hoverImg from "../assets/mymainphoto.png";
 import { TypeAnimation } from "react-type-animation";
 import SocialIcons from "./SocialIcons";
 import Button from "./Button";
-import { FaArrowUp, FaDownload, FaExpand } from "react-icons/fa";
-import { IoMdClose } from "react-icons/io";
+import About from "./About";
+import Skills from "./Skill";
+import Portfolio from "./Portfolio";
+import Experience from "./Experience";
+import Contact from "./Contact";
+import { FaArrowUp } from "react-icons/fa";
 import { Fade } from "react-awesome-reveal";
-import { motion, AnimatePresence } from "framer-motion";
 
 const Home = () => {
   const [currentImg, setCurrentImg] = useState(img);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [showResumeModal, setShowResumeModal] = useState(false);
-  const [resumeUrl, setResumeUrl] = useState("/assets/RajeshPandey-Resume.pdf");
-  const [isPdfLoaded, setIsPdfLoaded] = useState(false);
+
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 300);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const openResumeInNewTab = () => {
-    window.open(resumeUrl, "_blank");
-  };
-
-  // Update the download handling to avoid sandbox restrictions
-  const handleDownloadResume = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    // Open in new tab is the most reliable approach across all devices and environments
-    window.open(resumeUrl, "_blank");
-  };
-
-  // Function to render proper resume button based on device type
-  const renderResumeButton = () => {
-    const isMobile =
-      /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(
-        navigator.userAgent
-      ) || window.innerWidth < 768;
-
-    if (isMobile) {
-      return <Button text="View Resume" href={resumeUrl} download={true} />;
-    } else {
-      return (
-        <Button
-          text="View Resume"
-          onClick={() => setShowResumeModal(true)}
-          type="button"
-        />
-      );
-    }
   };
 
   return (
@@ -117,134 +76,20 @@ const Home = () => {
             </p>
             <div className="flex flex-col sm:flex-row justify-center sm:justify-start gap-4">
               <Button text="Hire Me" href="/contact" />
-              {renderResumeButton()}
+              <Button
+                text="View Resume"
+                href="/assets/RajeshPandey-Resume.pdf"
+                download
+              />
             </div>
             <div className="py-8 m-2">
-              <SocialIcons />
-            </div>
+         <SocialIcons />
+         </div>
           </Fade>
+         
         </div>
       </section>
-
-      {/* Resume Modal */}
-      <AnimatePresence>
-        {showResumeModal && (
-          <>
-            <motion.div
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowResumeModal(false)}
-            >
-              <motion.div
-                className="w-11/12 h-[90vh] max-w-4xl bg-gray-900 rounded-xl overflow-hidden flex flex-col relative"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="bg-gray-800 p-4 flex justify-between items-center">
-                  <h3 className="text-xl font-semibold text-white">
-                    My Resume
-                  </h3>
-                  <div className="flex gap-3">
-                    <button
-                      className="text-white p-2 rounded-full hover:bg-gray-700 transition-colors"
-                      onClick={openResumeInNewTab}
-                      title="Open in new tab"
-                    >
-                      <FaExpand />
-                    </button>
-                    <button
-                      className="text-white p-2 rounded-full hover:bg-gray-700 transition-colors"
-                      onClick={openResumeInNewTab} // Use openResumeInNewTab for all download actions
-                      title="View resume"
-                    >
-                      <FaDownload />
-                    </button>
-                    <button
-                      className="text-white p-2 rounded-full hover:bg-gray-700 transition-colors"
-                      onClick={() => setShowResumeModal(false)}
-                      title="Close"
-                    >
-                      <IoMdClose />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Mobile-friendly PDF Preview Container */}
-                <div className="flex-1 w-full h-full bg-gray-100 flex flex-col items-center justify-center p-4">
-                  <div className="h-full w-full flex flex-col items-center justify-center">
-                    <div className="flex flex-col items-center justify-center mb-6">
-                      <div className="text-gray-700 text-center mb-4">
-                        <p className="font-semibold text-xl mb-2">
-                          Resume Preview
-                        </p>
-                        <p className="text-sm">
-                          Due to browser security restrictions, the PDF cannot
-                          be displayed directly.
-                        </p>
-                      </div>
-
-                      <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                        <motion.button
-                          onClick={openResumeInNewTab}
-                          className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
-                          whileHover={{ scale: 1.03 }}
-                          whileTap={{ scale: 0.97 }}
-                        >
-                          <FaExpand className="text-sm" /> View in Browser
-                        </motion.button>
-
-                        <motion.button
-                          onClick={openResumeInNewTab} // Use openResumeInNewTab instead of handleDownloadResume
-                          className="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
-                          whileHover={{ scale: 1.03 }}
-                          whileTap={{ scale: 0.97 }}
-                        >
-                          <FaDownload className="text-sm" /> View PDF
-                        </motion.button>
-                      </div>
-                    </div>
-
-                    {/* Resume placeholder/image - Static content that won't cause DOM errors */}
-                    <div className="border-2 border-dashed border-gray-400 rounded-lg p-8 flex flex-col items-center justify-center w-4/5 h-4/5 max-w-lg bg-white">
-                      <div className="text-4xl font-bold text-gray-400 mb-4">
-                        RESUME
-                      </div>
-                      <div className="text-xl font-semibold text-gray-500 mb-2">
-                        Rajesh Pandey
-                      </div>
-                      <div className="text-sm text-gray-500 mb-6">
-                        Full Stack Developer
-                      </div>
-                      <div className="flex flex-col gap-2 w-full">
-                        {[...Array(5)].map((_, i) => (
-                          <div
-                            key={`line-${i}`}
-                            className="h-2 bg-gray-200 rounded w-full"
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gray-800 p-2 flex justify-center">
-                  <button
-                    onClick={openResumeInNewTab} // Use openResumeInNewTab for more reliable handling
-                    className="flex items-center gap-2 bg-red-500 hover:bg-red-600 transition-colors text-white py-2 px-4 rounded-lg"
-                  >
-                    <FaDownload /> View Resume
-                  </button>
-                </div>
-              </motion.div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-
+    
       <button
         onClick={scrollToTop}
         className={`fixed bottom-4 right-4 z-50 p-3 rounded-full bg-red-500 text-white shadow-lg hover:bg-red-700 transition-all duration-300 ${
