@@ -15,31 +15,20 @@ const Button = ({ text, href, download, onClick, type }) => {
     );
   }
 
-  // For asset links (like resume), handle mobile device compatibility
+  // For asset links (like resume), use approach that works with sandboxed environments
   if (href && href.startsWith("/assets")) {
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    // If mobile, use regular anchor tag with target="_blank" to let the device handle it natively
-    if (isMobile) {
-      return (
-        <a
-          href={href}
-          className={buttonStyle}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {text}
-        </a>
-      );
-    }
-
-    // For desktop, use download attribute
+    // Always use target="_blank" to open in a new tab to avoid sandbox restrictions
+    // This works more reliably across devices and deployed environments
     return (
       <a
         href={href}
-        download="Rajesh-Pandey-Resume.pdf"
         className={buttonStyle}
-        onClick={(e) => e.stopPropagation()}
+        target="_blank"
+        rel="noopener noreferrer"
+        // Avoid using download attribute which can trigger sandbox restrictions
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
         {text}
       </a>

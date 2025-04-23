@@ -33,24 +33,13 @@ const Home = () => {
     window.open(resumeUrl, "_blank");
   };
 
-  // More reliable download function that works across devices
+  // Update the download handling to avoid sandbox restrictions
   const handleDownloadResume = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    // For mobile browsers with stricter security
-    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      // Open in a new tab which will trigger the browser's native download or viewer
-      window.open(resumeUrl, "_blank");
-    } else {
-      // For desktop browsers, try a more direct approach
-      const link = document.createElement("a");
-      link.href = resumeUrl;
-      link.setAttribute("download", "Rajesh-Pandey-Resume.pdf");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+    // Open in new tab is the most reliable approach across all devices and environments
+    window.open(resumeUrl, "_blank");
   };
 
   return (
@@ -153,8 +142,8 @@ const Home = () => {
                     </button>
                     <button
                       className="text-white p-2 rounded-full hover:bg-gray-700 transition-colors"
-                      onClick={handleDownloadResume}
-                      title="Download resume"
+                      onClick={openResumeInNewTab} // Use openResumeInNewTab for all download actions
+                      title="View resume"
                     >
                       <FaDownload />
                     </button>
@@ -193,12 +182,12 @@ const Home = () => {
                         </motion.button>
 
                         <motion.button
-                          onClick={handleDownloadResume}
+                          onClick={openResumeInNewTab} // Use openResumeInNewTab instead of handleDownloadResume
                           className="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
                           whileHover={{ scale: 1.03 }}
                           whileTap={{ scale: 0.97 }}
                         >
-                          <FaDownload className="text-sm" /> Download PDF
+                          <FaDownload className="text-sm" /> View PDF
                         </motion.button>
                       </div>
                     </div>
@@ -228,10 +217,10 @@ const Home = () => {
 
                 <div className="bg-gray-800 p-2 flex justify-center">
                   <button
-                    onClick={handleDownloadResume}
+                    onClick={openResumeInNewTab} // Use openResumeInNewTab for more reliable handling
                     className="flex items-center gap-2 bg-red-500 hover:bg-red-600 transition-colors text-white py-2 px-4 rounded-lg"
                   >
-                    <FaDownload /> Download Resume
+                    <FaDownload /> View Resume
                   </button>
                 </div>
               </motion.div>
