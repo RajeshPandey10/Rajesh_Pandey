@@ -67,6 +67,7 @@ const Home = () => {
               </span>
             </h3>
             <p className="text-sm sm:text-lg mb-6 hover:shadow-[0_0_15px_3px_rgba(255,0,0,0.8)] hover:rounded-2xl transition duration-500 p-4 w-full">
+            <h1>Hi I am <a href="https://rajeshpandey10.com.np/" className="text-green-500">Rajesh Pandey-Full Stack Web Developer.</a></h1>
               In my seventh semester of computer engineering school, I am a
               committed and driven learner who is passionate about using
               technology to develop original solutions. I've been consistently

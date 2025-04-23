@@ -74,6 +74,7 @@ const About = () => {
               Career
             </h2>
             <p className="text-gray-300 text-center">
+              <h1>Hi I am <a href="https://rajeshpandey10.com.np/" className="text-green-500">Rajesh Pandey.</a></h1>
             As a dedicated and ambitious Computer Engineering student in my 7th semester, I am passionate about harnessing the power of technology to create innovative solutions. My coursework has been continuously equipping me with a strong foundation in programming, hardware, and software development. I'm eager to apply my knowledge and gain practical experience in the field.
 
             I am an avid problem solver, continuously seeking opportunities to learn and grow in the ever-evolving tech landscape. My desire to contribute to real-world projects and my ability to adapt quickly make me a valuable addition to any team.
