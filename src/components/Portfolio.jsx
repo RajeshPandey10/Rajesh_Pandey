@@ -137,7 +137,7 @@ const Portfolio = () => {
             transition={{ delay: 0.7, duration: 0.8 }}
             className="text-gray-400 mt-4 max-w-lg mx-auto"
           >
-            Explore a curated selection of my work, showcasing my skills in web
+            Explore a curated selection of <a href="https://rajeshpandey10.com.np" className="text-green-500">Rajesh Pandey's work</a>, showcasing my skills in web
             development, design, and problem-solving
           </motion.p>
         </motion.div>

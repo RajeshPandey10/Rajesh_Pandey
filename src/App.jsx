@@ -32,7 +32,7 @@ const App = () => {
 
   return (
     <div className="bg-black text-white">
-      <h1 style={{display:"none"}}>Rajesh Pandey – Web Developer Portfolio</h1>
+    
       {!hideHeader && <Header />}
       <Suspense fallback={<Loader />}>
         <Routes>

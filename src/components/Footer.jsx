@@ -108,7 +108,7 @@ const Footer = () => {
         <p className="text-gray-400 text-sm">
           Made with{" "}
           <span className="text-lg font-bold animate-color-cycle">❤️</span> by{" "}
-          <span className="font-bold text-white">Rajesh</span>
+          <span className="font-bold text-white"><a href="https://rajeshpandey10.com.np">Rajesh Pandey</a></span>
         </p>
         </motion.div>
         <p className="text-gray-500 text-xs mt-2">
