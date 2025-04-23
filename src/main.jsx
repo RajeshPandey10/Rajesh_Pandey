@@ -17,12 +17,22 @@ const Main = () => {
       once: true,
     });
 
-    // Simulate a 2-second loading delay
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    // Check if initial loading has already happened
+    const hasLoaded = sessionStorage.getItem("hasInitiallyLoaded");
 
-    return () => clearTimeout(timer);
+    if (hasLoaded) {
+      // Skip loader if already loaded once in this session
+      setLoading(false);
+    } else {
+      // Show loader only for the first load in this session
+      const timer = setTimeout(() => {
+        setLoading(false);
+        // Mark that initial loading has happened
+        sessionStorage.setItem("hasInitiallyLoaded", "true");
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   if (loading) {
