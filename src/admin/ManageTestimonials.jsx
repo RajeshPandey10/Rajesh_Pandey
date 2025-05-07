@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import AuthContext from "../context/AuthContext";
 import {
   fetchAllTestimonials,
@@ -117,16 +117,22 @@ const ManageTestimonials = () => {
     });
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  }, []);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = useCallback((e) => {
     if (e.target.files[0]) {
-      setFormData({ ...formData, photo: e.target.files[0] });
+      setFormData((prevData) => ({
+        ...prevData,
+        photo: e.target.files[0],
+      }));
     }
-  };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -201,7 +207,7 @@ const ManageTestimonials = () => {
     return stars;
   };
 
-  const FormContent = ({ isEditing }) => (
+  const FormContent = React.memo(({ isEditing }) => (
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
@@ -349,7 +355,7 @@ const ManageTestimonials = () => {
         </button>
       </div>
     </form>
-  );
+  ));
 
   return (
     <div className="p-6 bg-gray-900 min-h-screen">
@@ -636,4 +642,4 @@ const ManageTestimonials = () => {
   );
 };
 
-export default ManageTestimonials;
+export default React.memo(ManageTestimonials);
