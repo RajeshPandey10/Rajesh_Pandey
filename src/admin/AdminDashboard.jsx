@@ -4,6 +4,7 @@ import ManageProjects from "./ManageProjects";
 import AuthContext from "../context/AuthContext";
 import { fetchContacts, replyToContact } from "../services/api";
 import { ToastContainer, toast } from "react-toastify";
+import {FaQuoteLeft} from "react-icons/fa"
 import "react-toastify/dist/ReactToastify.css";
 
 const ManageContacts = () => {

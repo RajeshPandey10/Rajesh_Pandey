@@ -92,15 +92,21 @@ export const submitContactForm = async (formData) => {
   }
 };
 
-// Testimonial API endpoints
+// Testimonial API endpoints - Ensure we're calling the right endpoint that returns only approved testimonials
 export const fetchTestimonials = async () => {
-  const response = await axios.get(`${API_BASE_URL}/testimonials`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_BASE_URL}/testimonials`);
+    // The server should already filter for approved testimonials, but let's add a safeguard
+    return response.data.filter(testimonial => testimonial.status === 'approved');
+  } catch (error) {
+    console.error("Error fetching testimonials:", error);
+    return [];
+  }
 };
 
-export const fetchAllTestimonials = async (token) => {
+export const fetchAllTestimonials = async (adminToken) => {
   const response = await axios.get(`${API_BASE_URL}/testimonials/all`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${adminToken}` },
   });
   return response.data;
 };
@@ -117,18 +123,18 @@ export const submitTestimonial = async (testimonialData) => {
   return response.data;
 };
 
-export const updateTestimonialStatus = async (id, status, token) => {
+export const updateTestimonialStatus = async (id, status, adminToken) => {
   const response = await axios.put(
     `${API_BASE_URL}/testimonials/${id}/status`,
     { status },
     {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${adminToken}` },
     }
   );
   return response.data;
 };
 
-export const updateTestimonial = async (id, data, token) => {
+export const updateTestimonial = async (id, data, adminToken) => {
   const formData = new FormData();
   for (const key in data) {
     if (data[key] !== undefined) {
@@ -138,16 +144,16 @@ export const updateTestimonial = async (id, data, token) => {
 
   const response = await axios.put(`${API_BASE_URL}/testimonials/${id}`, formData, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${adminToken}`,
       'Content-Type': 'multipart/form-data',
     },
   });
   return response.data;
 };
 
-export const deleteTestimonial = async (id, token) => {
+export const deleteTestimonial = async (id, adminToken) => {
   const response = await axios.delete(`${API_BASE_URL}/testimonials/${id}`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${adminToken}` },
   });
   return response.data;
 };

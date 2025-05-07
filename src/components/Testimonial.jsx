@@ -17,10 +17,15 @@ const Testimonial = () => {
     const loadTestimonials = async () => {
       try {
         const data = await fetchTestimonials();
-        setTestimonials(data);
+        // Ensure we only display approved testimonials
+        const approvedTestimonials = data.filter(
+          (testimonial) => testimonial.status === "approved"
+        );
+        setTestimonials(approvedTestimonials);
         setIsLoading(false);
       } catch (error) {
         console.error("Error loading testimonials:", error);
+        setTestimonials([]);
         setIsLoading(false);
       }
     };
@@ -30,22 +35,22 @@ const Testimonial = () => {
   // Auto-play functionality
   useEffect(() => {
     if (!testimonials.length) return;
-    
+
     const autoPlay = () => {
-      setCurrent(prevCurrent => {
+      setCurrent((prevCurrent) => {
         // Calculate next slide with direction
         const nextSlide = (prevCurrent + direction) % testimonials.length;
         return nextSlide < 0 ? testimonials.length - 1 : nextSlide;
       });
-      
+
       // Every 5 slides, change direction
       if (current > 0 && current % 5 === 0) {
-        setDirection(prevDirection => -prevDirection);
+        setDirection((prevDirection) => -prevDirection);
       }
     };
-    
+
     autoPlayRef.current = setInterval(autoPlay, 5000);
-    
+
     return () => {
       if (autoPlayRef.current) {
         clearInterval(autoPlayRef.current);
@@ -55,14 +60,14 @@ const Testimonial = () => {
 
   const handlePrev = () => {
     clearInterval(autoPlayRef.current);
-    setCurrent(prevCurrent => 
+    setCurrent((prevCurrent) =>
       prevCurrent === 0 ? testimonials.length - 1 : prevCurrent - 1
     );
   };
 
   const handleNext = () => {
     clearInterval(autoPlayRef.current);
-    setCurrent(prevCurrent => 
+    setCurrent((prevCurrent) =>
       prevCurrent === testimonials.length - 1 ? 0 : prevCurrent + 1
     );
   };
@@ -74,7 +79,7 @@ const Testimonial = () => {
   const handleTouchEnd = (e) => {
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchStartX.current - touchEndX;
-    
+
     // Swipe threshold
     if (Math.abs(diff) > 50) {
       if (diff > 0) {
@@ -90,15 +95,15 @@ const Testimonial = () => {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
-    
+
     for (let i = 0; i < fullStars; i++) {
       stars.push(<FaStar key={`star-${i}`} className="text-yellow-400" />);
     }
-    
+
     if (hasHalfStar) {
       stars.push(<FaStarHalf key="half-star" className="text-yellow-400" />);
     }
-    
+
     return stars;
   };
 
@@ -138,13 +143,16 @@ const Testimonial = () => {
     },
   };
 
-  // If no testimonials, don't render the component
+  // If no approved testimonials, don't render the component
   if (testimonials.length === 0 && !isLoading) {
     return null;
   }
 
   return (
-    <section id="testimonials" className="bg-gradient-to-b from-black to-gray-900 py-16 px-6 relative overflow-hidden">
+    <section
+      id="testimonials"
+      className="bg-gradient-to-b from-black to-gray-900 py-16 px-6 relative overflow-hidden"
+    >
       <motion.div
         className="container mx-auto max-w-5xl"
         variants={containerVariants}
@@ -185,8 +193,8 @@ const Testimonial = () => {
             />
           </div>
         ) : (
-          <div 
-            className="relative overflow-hidden h-[500px] sm:h-[400px]" 
+          <div
+            className="relative overflow-hidden h-[500px] sm:h-[400px]"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
@@ -225,7 +233,7 @@ const Testimonial = () => {
                   <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl p-8 shadow-2xl border border-gray-700 max-w-3xl relative">
                     <FaQuoteLeft className="absolute top-6 left-6 text-blue-500/20 text-4xl" />
                     <FaQuoteRight className="absolute bottom-6 right-6 text-blue-500/20 text-4xl" />
-                    
+
                     <div className="flex flex-col sm:flex-row items-center gap-6">
                       <div className="flex-shrink-0">
                         {testimonials[current].photo ? (
@@ -240,7 +248,7 @@ const Testimonial = () => {
                           </div>
                         )}
                       </div>
-                      
+
                       <div className="flex-1 text-center sm:text-left">
                         <h3 className="text-xl sm:text-2xl font-bold text-blue-400 mb-1">
                           {testimonials[current].name}
