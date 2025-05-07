@@ -21,6 +21,7 @@ const Contact = lazy(() => import("./components/Contact"));
 const AdminDashboard = lazy(() => import("./admin/AdminDashboard"));
 const ManageProjects = lazy(() => import("./admin/ManageProjects"));
 const ManageContacts = lazy(() => import("./admin/ManageContacts"));
+const ManageTestimonials = lazy(() => import("./admin/ManageTestimonials")); // New import
 const Login = lazy(() => import("./admin/Login"));
 
 const App = () => {
@@ -32,7 +33,6 @@ const App = () => {
 
   return (
     <div className="bg-black text-white">
-    
       {!hideHeader && <Header />}
       <Suspense fallback={<Loader />}>
         <Routes>
@@ -55,6 +55,11 @@ const App = () => {
                   <Route index element={<AdminDashboard />} />
                   <Route path="projects" element={<ManageProjects />} />
                   <Route path="contacts" element={<ManageContacts />} />
+                  <Route
+                    path="testimonials"
+                    element={<ManageTestimonials />}
+                  />{" "}
+                  {/* New route */}
                 </Routes>
               </ProtectedRoute>
             }

@@ -162,6 +162,13 @@ const AdminDashboard = () => {
             >
               Manage Contacts
             </Link>
+            <Link
+              to="/admin/testimonials"
+              className="flex items-center p-3 rounded-lg hover:bg-gray-800 transition-colors"
+            >
+              <FaQuoteLeft className="mr-3 text-purple-400" />
+              <span>Manage Testimonials</span>
+            </Link>
           </nav>
         </div>
       </div>

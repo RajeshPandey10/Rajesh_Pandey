@@ -4,18 +4,14 @@ import hoverImg from "../assets/mymainphoto.png";
 import { TypeAnimation } from "react-type-animation";
 import SocialIcons from "./SocialIcons";
 import Button from "./Button";
-import About from "./About";
-import Skills from "./Skill";
-import Portfolio from "./Portfolio";
-import Experience from "./Experience";
-import Contact from "./Contact";
 import { FaArrowUp } from "react-icons/fa";
 import { Fade } from "react-awesome-reveal";
+import Testimonial from "./Testimonial";
+
 
 const Home = () => {
   const [currentImg, setCurrentImg] = useState(img);
   const [showScrollTop, setShowScrollTop] = useState(false);
-
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -67,7 +63,15 @@ const Home = () => {
               </span>
             </h3>
             <p className="text-sm sm:text-lg mb-6 hover:shadow-[0_0_15px_3px_rgba(255,0,0,0.8)] hover:rounded-2xl transition duration-500 p-4 w-full">
-            <h1>Hi I am <a href="https://rajeshpandey10.com.np/" className="text-green-500">Rajesh Pandey-Full Stack Web Developer.</a></h1>
+              <h1>
+                Hi I am{" "}
+                <a
+                  href="https://rajeshpandey10.com.np/"
+                  className="text-green-500"
+                >
+                  Rajesh Pandey-Full Stack Web Developer.
+                </a>
+              </h1>
               In my seventh semester of computer engineering school, I am a
               committed and driven learner who is passionate about using
               technology to develop original solutions. I've been consistently
@@ -84,13 +88,16 @@ const Home = () => {
               />
             </div>
             <div className="py-8 m-2">
-         <SocialIcons />
-         </div>
+              <SocialIcons />
+            </div>
+           
           </Fade>
-         
         </div>
+       
       </section>
-    
+
+     <Testimonial/>
+
       <button
         onClick={scrollToTop}
         className={`fixed bottom-4 right-4 z-50 p-3 rounded-full bg-red-500 text-white shadow-lg hover:bg-red-700 transition-all duration-300 ${
@@ -99,6 +106,7 @@ const Home = () => {
       >
         <FaArrowUp size={20} />
       </button>
+     
     </>
   );
 };

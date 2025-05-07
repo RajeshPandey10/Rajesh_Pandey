@@ -91,3 +91,63 @@ export const submitContactForm = async (formData) => {
     throw error; // Throw the error to handle it in the frontend
   }
 };
+
+// Testimonial API endpoints
+export const fetchTestimonials = async () => {
+  const response = await axios.get(`${API_BASE_URL}/testimonials`);
+  return response.data;
+};
+
+export const fetchAllTestimonials = async (token) => {
+  const response = await axios.get(`${API_BASE_URL}/testimonials/all`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+export const submitTestimonial = async (testimonialData) => {
+  const formData = new FormData();
+  for (const key in testimonialData) {
+    formData.append(key, testimonialData[key]);
+  }
+
+  const response = await axios.post(`${API_BASE_URL}/testimonials`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return response.data;
+};
+
+export const updateTestimonialStatus = async (id, status, token) => {
+  const response = await axios.put(
+    `${API_BASE_URL}/testimonials/${id}/status`,
+    { status },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  return response.data;
+};
+
+export const updateTestimonial = async (id, data, token) => {
+  const formData = new FormData();
+  for (const key in data) {
+    if (data[key] !== undefined) {
+      formData.append(key, data[key]);
+    }
+  }
+
+  const response = await axios.put(`${API_BASE_URL}/testimonials/${id}`, formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+
+export const deleteTestimonial = async (id, token) => {
+  const response = await axios.delete(`${API_BASE_URL}/testimonials/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
