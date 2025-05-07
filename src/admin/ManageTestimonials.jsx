@@ -117,23 +117,6 @@ const ManageTestimonials = () => {
     });
   };
 
-  const handleInputChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  }, []);
-
-  const handleFileChange = useCallback((e) => {
-    if (e.target.files[0]) {
-      setFormData((prevData) => ({
-        ...prevData,
-        photo: e.target.files[0],
-      }));
-    }
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -207,155 +190,186 @@ const ManageTestimonials = () => {
     return stars;
   };
 
-  const FormContent = React.memo(({ isEditing }) => (
-    <form onSubmit={handleSubmit}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">
-            Name*
-          </label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">
-            Email*
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">
-            Role/Position
-          </label>
-          <input
-            type="text"
-            name="role"
-            value={formData.role}
-            onChange={handleInputChange}
-            placeholder="e.g. Client, Colleague, Manager"
-            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">
-            Rating (1-5)*
-          </label>
-          <input
-            type="number"
-            name="rating"
-            min="1"
-            max="5"
-            step="0.5"
-            value={formData.rating}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-            required
-          />
-        </div>
+  const TestimonialForm = ({ isEditing }) => {
+    const [localFormData, setLocalFormData] = useState(formData);
 
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-300 mb-1">
-            Photo (Optional)
-          </label>
-          <div className="flex items-center space-x-2">
-            <label className="flex items-center px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 cursor-pointer">
-              <FaUpload className="mr-2" />
-              {formData.photo ? "Change Photo" : "Upload Photo"}
-              <input
-                type="file"
-                name="photo"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-              />
+    useEffect(() => {
+      setLocalFormData(formData);
+    }, [editingTestimonial, isAddingNew]);
+
+    const handleLocalInputChange = (e) => {
+      const { name, value } = e.target;
+      setLocalFormData({
+        ...localFormData,
+        [name]: value,
+      });
+    };
+
+    const handleLocalFileChange = (e) => {
+      if (e.target.files[0]) {
+        setLocalFormData({
+          ...localFormData,
+          photo: e.target.files[0],
+        });
+      }
+    };
+
+    const handleLocalSubmit = (e) => {
+      e.preventDefault();
+      setFormData(localFormData);
+      handleSubmit(e);
+    };
+
+    return (
+      <form onSubmit={handleLocalSubmit}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-1">
+              Name*
             </label>
-            {formData.photo && (
-              <span className="text-sm text-green-400">
-                {formData.photo.name || "New photo selected"}
-              </span>
-            )}
-            {isEditing && !formData.photo && (
-              <span className="text-sm text-gray-400">
-                Current photo will be kept if none selected
-              </span>
-            )}
+            <input
+              type="text"
+              name="name"
+              value={localFormData.name}
+              onChange={handleLocalInputChange}
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-1">
+              Email*
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={localFormData.email}
+              onChange={handleLocalInputChange}
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-1">
+              Role/Position
+            </label>
+            <input
+              type="text"
+              name="role"
+              value={localFormData.role}
+              onChange={handleLocalInputChange}
+              placeholder="e.g. Client, Colleague, Manager"
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-1">
+              Rating (1-5)*
+            </label>
+            <input
+              type="number"
+              name="rating"
+              min="1"
+              max="5"
+              step="0.5"
+              value={localFormData.rating}
+              onChange={handleLocalInputChange}
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              required
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-300 mb-1">
+              Photo (Optional)
+            </label>
+            <div className="flex items-center space-x-2">
+              <label className="flex items-center px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 cursor-pointer">
+                <FaUpload className="mr-2" />
+                {localFormData.photo ? "Change Photo" : "Upload Photo"}
+                <input
+                  type="file"
+                  name="photo"
+                  accept="image/*"
+                  onChange={handleLocalFileChange}
+                  className="hidden"
+                />
+              </label>
+              {localFormData.photo && (
+                <span className="text-sm text-green-400">
+                  {localFormData.photo.name || "New photo selected"}
+                </span>
+              )}
+              {isEditing && !localFormData.photo && (
+                <span className="text-sm text-gray-400">
+                  Current photo will be kept if none selected
+                </span>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-300 mb-1">
-          Testimonial Message*
-        </label>
-        <textarea
-          name="message"
-          value={formData.message}
-          onChange={handleInputChange}
-          rows="4"
-          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-          required
-        />
-      </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-300 mb-1">
+            Testimonial Message*
+          </label>
+          <textarea
+            name="message"
+            value={localFormData.message}
+            onChange={handleLocalInputChange}
+            rows="4"
+            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            required
+          />
+        </div>
 
-      <div className="flex justify-end space-x-2">
-        <button
-          type="button"
-          onClick={cancelEdit}
-          className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          disabled={loading}
-          className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 flex items-center"
-        >
-          {loading ? (
-            <>
-              <svg
-                className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              Processing...
-            </>
-          ) : isEditing ? (
-            "Update Testimonial"
-          ) : (
-            "Add Testimonial"
-          )}
-        </button>
-      </div>
-    </form>
-  ));
+        <div className="flex justify-end space-x-2">
+          <button
+            type="button"
+            onClick={cancelEdit}
+            className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 flex items-center"
+          >
+            {loading ? (
+              <>
+                <svg
+                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Processing...
+              </>
+            ) : isEditing ? (
+              "Update Testimonial"
+            ) : (
+              "Add Testimonial"
+            )}
+          </button>
+        </div>
+      </form>
+    );
+  };
 
   return (
     <div className="p-6 bg-gray-900 min-h-screen">
@@ -491,7 +505,7 @@ const ManageTestimonials = () => {
                       ? "Edit Testimonial"
                       : "Add New Testimonial"}
                   </h2>
-                  <FormContent isEditing={!!editingTestimonial} />
+                  <TestimonialForm isEditing={!!editingTestimonial} />
                 </div>
               </motion.div>
             )}
