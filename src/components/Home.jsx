@@ -7,7 +7,7 @@ import Button from "./Button";
 import { FaArrowUp } from "react-icons/fa";
 import { Fade } from "react-awesome-reveal";
 import Testimonial from "./Testimonial";
-
+import AdSense from "./AdSense";
 
 const Home = () => {
   const [currentImg, setCurrentImg] = useState(img);
@@ -90,13 +90,17 @@ const Home = () => {
             <div className="py-8 m-2">
               <SocialIcons />
             </div>
-           
           </Fade>
         </div>
-       
       </section>
 
-     <Testimonial/>
+      <AdSense
+        client="ca-pub-8181018973115872"
+        slot="9376540955"
+        style={{ margin: "20px 0" }}
+      />
+
+      <Testimonial />
 
       <button
         onClick={scrollToTop}
@@ -106,7 +110,6 @@ const Home = () => {
       >
         <FaArrowUp size={20} />
       </button>
-     
     </>
   );
 };
