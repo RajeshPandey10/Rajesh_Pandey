@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { FaGraduationCap, FaBriefcase, FaLandmark } from "react-icons/fa";
 import { MdLocalActivity } from "react-icons/md";
+import AdSense from "./AdSense";
 
 const About = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -68,6 +69,7 @@ const About = () => {
         >
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
             About Me
+            {/* <AdSense/> */}
           </span>
           <motion.span
             className="absolute bottom-0 left-1/2 w-20 h-1 bg-blue-500 rounded-full"
