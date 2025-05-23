@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import img from "../assets/myphoto.png";
+import img from "../assets/my2photo.jpeg";
 import hoverImg from "../assets/mymainphoto.png";
 import { TypeAnimation } from "react-type-animation";
 import SocialIcons from "./SocialIcons";
@@ -25,7 +25,7 @@ const Home = () => {
       >
         <div className="md:w-1/2 flex justify-center transition-all duration-300 mb-6 md:mb-0">
           <div
-            onMouseEnter={() => setCurrentImg(hoverImg)}
+            // onMouseEnter={() => setCurrentImg(hoverImg)}
             onMouseLeave={() => setCurrentImg(img)}
           >
             <img
