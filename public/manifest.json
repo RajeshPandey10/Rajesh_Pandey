@@ -1,0 +1,41 @@
+{
+  "name": "Rajesh Pandey - Full Stack Web Developer",
+  "short_name": "Rajesh Pandey",
+  "description": "Professional Full Stack Web Developer from Nepal specializing in MERN Stack, React.js, Node.js. Portfolio website of Rajesh Pandey.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1f2937",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/assets/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["business", "productivity", "portfolio"],
+  "shortcuts": [
+    {
+      "name": "About Rajesh Pandey",
+      "short_name": "About",
+      "description": "Learn more about Rajesh Pandey",
+      "url": "/about"
+    },
+    {
+      "name": "Portfolio",
+      "short_name": "Portfolio",
+      "description": "View Rajesh Pandey's projects",
+      "url": "/portfolio"
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "description": "Contact Rajesh Pandey",
+      "url": "/contact"
+    }
+  ]
+}

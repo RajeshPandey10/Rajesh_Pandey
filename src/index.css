@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* .loader {
+  border-top-color: #3498db;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  animation: spin 1s linear infinite;
+} */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+html {
+  scroll-behavior: smooth;
+}
+/* HTML: <div class="loader"></div>
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid #0000;
+  border-right-color: #ffa50097;
+  position: relative;
+  animation: l24 1s infinite linear;
+}
+.loader:before,
+.loader:after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: inherit;
+  animation: inherit;
+  animation-duration: 2s;
+}
+.loader:after {
+  animation-duration: 4s;
+}
+@keyframes l24 {
+  100% {transform: rotate(1turn)}
+} */
+ /* HTML: <div class="loader"></div> */
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 20px;
+  aspect-ratio: 1;
+  animation: l13-0 2s linear infinite;
+}
+.loader::before,
+.loader::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(at 30% 30%,#0000,#000a) red;
+  animation: l13-1 1.5s cubic-bezier(.5,-500,.5,500) infinite;
+}
+.loader::after {
+  animation-delay: -0.15s;
+}
+@keyframes l13-0 { 
+  100% { transform:rotate(360deg)} 
+}
+@keyframes l13-1 { 
+  100% { transform:translate(0.5px)} 
+}
+/* Heartbeat Animation */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.3);
+  }
+  60% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+
+
+/* Heart Color Cycle Animation */
+@keyframes color-cycle {
+  0% { color: #ff0000; } /* Red */
+  8% { color: #ff7f00; } /* Orange */
+  16% { color: #ffff00; } /* Yellow */
+  25% { color: #7fff00; } /* Lime */
+  33% { color: #00ff00; } /* Green */
+  41% { color: #00ff7f; } /* Spring Green */
+  50% { color: #00ffff; } /* Cyan */
+  58% { color: #007fff; } /* Azure */
+  66% { color: #0000ff; } /* Blue */
+  75% { color: #7f00ff; } /* Violet */
+  83% { color: #ff00ff; } /* Magenta */
+  100% { color: #ff007f; } /* Rose */
+}
+
+.animate-color-cycle {
+  animation: color-cycle 3s infinite;
+}
+
+/* Pulse Animation for Cursor */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 1.5s infinite;
+}
