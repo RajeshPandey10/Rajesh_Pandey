@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
+import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
 import ManageProjects from "./ManageProjects";
 import ManageTestimonials from "./ManageTestimonials";
 import ManageGallery from "./ManageGallery";
@@ -21,6 +21,26 @@ const AdminDashboard = () => {
   const [contacts, setContacts] = useState([]);
   const { adminToken, logout } = useContext(AuthContext);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear all localStorage items
+    localStorage.clear();
+    
+    // Call the logout function from context
+    logout();
+    
+    // Show success message
+    toast.success("Logged out successfully!", {
+      position: "top-right",
+      autoClose: 2000,
+    });
+    
+    // Redirect to home page after a short delay
+    setTimeout(() => {
+      navigate("/");
+    }, 2000);
+  };
 
   useEffect(() => {
     const loadContacts = async () => {
@@ -73,7 +93,7 @@ const AdminDashboard = () => {
               Admin Dashboard
             </h1>
             <button
-              onClick={logout}
+              onClick={handleLogout}
               className="flex items-center space-x-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded transition duration-300"
             >
               <FaSignOutAlt />

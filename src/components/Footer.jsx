@@ -1,4 +1,5 @@
 import React from "react";
+import SocialIcons from "./SocialIcons";
 
 const Footer = () => {
   const handleClick = () => {
@@ -16,10 +17,15 @@ const Footer = () => {
               <span className="text-3xl font-bold">राजेश</span> 
             </h3>
             <p className="text-gray-300 mb-4">Stay Connected</p>
-            <p className="text-gray-400">
+            <p className="text-gray-400 mb-6">
               Follow me on social media or reach out directly to stay updated
               with my latest endeavors.
             </p>
+            
+            {/* Social Media Icons */}
+            <div className="flex justify-start">
+              <SocialIcons />
+            </div>
           </div>
 
           {/* Right Side - Contact CTA */}
