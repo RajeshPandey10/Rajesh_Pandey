@@ -1,29 +1,94 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://portfolio-backend-xymu.onrender.com/api";
+const API_BASE_URL = "http://localhost:4000/api";
 
-export const fetchProjects = async () => {
-  const response = await axios.get(`${API_BASE_URL}/projects`);
+export const fetchProjects = async (
+  page = 1,
+  limit = 9,
+  category = "all",
+  featured = false
+) => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+  });
+
+  if (category && category !== "all") {
+    params.append("category", category);
+  }
+
+  if (featured) {
+    params.append("featured", "true");
+  }
+
+  const response = await axios.get(`${API_BASE_URL}/projects?${params}`);
   return response.data;
 };
 
-export const addProject = async (projectData) => {
-  const formData = new FormData();
-  for (const key in projectData) {
-    formData.append(key, projectData[key]);
+export const fetchGallery = async (page = 1, limit = 12, category = "all") => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+  });
+
+  if (category && category !== "all") {
+    params.append("category", category);
   }
 
-  const response = await axios.post(`${API_BASE_URL}/projects`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const response = await axios.get(`${API_BASE_URL}/gallery?${params}`);
+  return response.data;
+};
+
+export const addProject = async (projectData, token) => {
+  const formData = new FormData();
+
+  // Handle technologies array/string
+  if (projectData.technologies) {
+    if (typeof projectData.technologies === "string") {
+      formData.append("technologies", projectData.technologies);
+    } else if (Array.isArray(projectData.technologies)) {
+      formData.append("technologies", projectData.technologies.join(", "));
+    }
+  }
+
+  // Handle other fields
+  for (const key in projectData) {
+    if (key !== "technologies") {
+      formData.append(key, projectData[key]);
+    }
+  }
+
+  const response = await axios.post(
+    `${API_BASE_URL}/admin/projects`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return response.data;
 };
 
 // Update an existing project
 export const updateProject = async (id, project, token) => {
   const formData = new FormData();
+
+  // Handle technologies
+  if (project.technologies) {
+    if (typeof project.technologies === "string") {
+      formData.append("technologies", project.technologies);
+    } else if (Array.isArray(project.technologies)) {
+      formData.append("technologies", project.technologies.join(", "));
+    }
+  }
+
+  // Handle other fields
   Object.entries(project).forEach(([key, value]) => {
-    if (value) formData.append(key, value); // Append only non-empty fields
+    if (key !== "technologies" && value !== null && value !== undefined) {
+      formData.append(key, value);
+    }
   });
 
   const response = await axios.put(
@@ -46,131 +111,65 @@ export const deleteProject = async (id, token) => {
   return response.data;
 };
 
-export const createAdmin = async (username, password) => {
-  const response = await axios.post(`${API_BASE_URL}/admin/create`, {
-    username,
-    password,
-  });
-  return response.data;
-};
-
-export const loginAdmin = async (username, password) => {
-  const response = await axios.post(`${API_BASE_URL}/admin/login`, {
-    username,
-    password,
-  });
-  return response.data;
-};
-
-// Fetch all contact messages
-export const fetchContacts = async (token) => {
-  const response = await axios.get(`${API_BASE_URL}/contacts`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return response.data;
-};
-
-// Send a reply to a contact
-export const replyToContact = async (email, response, token) => {
-  try {
-    const res = await axios.post(
-      `${API_BASE_URL}/contacts/reply`,
-      { email, response },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    return res.data;
-  } catch (error) {
-    console.error("Error sending reply:", error);
-    throw error;
-  }
-};
-export const deleteContact = async (id, token) => {
-  await axios.delete(`${API_BASE_URL}/contacts/${id}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-};
-
-// Submit the contact form
-export const submitContactForm = async (formData) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/contacts`, formData);
-    return response.data; // Return the response data
-  } catch (error) {
-    console.error("Error submitting contact form:", error);
-    throw error; // Throw the error to handle it in the frontend
-  }
-};
-
-// Testimonial API endpoints - Ensure we're calling the right endpoint that returns only approved testimonials
+// Fetch testimonials (public, for portfolio display)
 export const fetchTestimonials = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/testimonials`);
-    // The server should already filter for approved testimonials, but let's add a safeguard
-    return response.data.filter(
-      (testimonial) => testimonial.status === "approved"
-    );
-  } catch (error) {
-    console.error("Error fetching testimonials:", error);
-    return [];
-  }
+  const response = await axios.get(`${API_BASE_URL}/testimonials`);
+  return response.data;
 };
 
-export const fetchAllTestimonials = async (adminToken) => {
-  const response = await axios.get(`${API_BASE_URL}/testimonials/all`, {
-    headers: { Authorization: `Bearer ${adminToken}` },
+// Submit contact form
+export const submitContact = async (contactData) => {
+  const response = await axios.post(`${API_BASE_URL}/contacts`, contactData);
+  return response.data;
+};
+
+// Gallery Admin API functions
+export const fetchAllGalleryItems = async (token) => {
+  const response = await axios.get(`${API_BASE_URL}/gallery/admin`, {
+    headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;
 };
 
-export const submitTestimonial = async (testimonialData) => {
+export const addGalleryItem = async (galleryData, token) => {
   const formData = new FormData();
-  for (const key in testimonialData) {
-    formData.append(key, testimonialData[key]);
+  formData.append("title", galleryData.title);
+  formData.append("description", galleryData.description);
+  formData.append("category", galleryData.category);
+  if (galleryData.image) {
+    formData.append("image", galleryData.image);
   }
 
-  const response = await axios.post(`${API_BASE_URL}/testimonials`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
+  const response = await axios.post(`${API_BASE_URL}/gallery`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
   });
   return response.data;
 };
 
-export const updateTestimonialStatus = async (id, status, adminToken) => {
-  const response = await axios.put(
-    `${API_BASE_URL}/testimonials/${id}/status`,
-    { status },
-    {
-      headers: { Authorization: `Bearer ${adminToken}` },
-    }
-  );
-  return response.data;
-};
-
-export const updateTestimonial = async (id, data, adminToken) => {
+export const updateGalleryItem = async (id, galleryData, token) => {
   const formData = new FormData();
-  for (const key in data) {
-    if (data[key] !== undefined) {
-      formData.append(key, data[key]);
-    }
+  formData.append("title", galleryData.title);
+  formData.append("description", galleryData.description);
+  formData.append("category", galleryData.category);
+  if (galleryData.image) {
+    formData.append("image", galleryData.image);
   }
 
-  const response = await axios.put(
-    `${API_BASE_URL}/testimonials/${id}`,
-    formData,
-    {
-      headers: {
-        Authorization: `Bearer ${adminToken}`,
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await axios.put(`${API_BASE_URL}/gallery/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };
 
-export const deleteTestimonial = async (id, adminToken) => {
-  const response = await axios.delete(`${API_BASE_URL}/testimonials/${id}`, {
-    headers: { Authorization: `Bearer ${adminToken}` },
+export const deleteGalleryItem = async (id, token) => {
+  const response = await axios.delete(`${API_BASE_URL}/gallery/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;
 };

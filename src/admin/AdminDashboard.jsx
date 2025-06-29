@@ -1,15 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 import ManageProjects from "./ManageProjects";
+import ManageTestimonials from "./ManageTestimonials";
+import ManageGallery from "./ManageGallery";
+import ManageContacts from "./ManageContacts";
 import AuthContext from "../context/AuthContext";
-import { fetchContacts, replyToContact } from "../services/api";
+import { fetchContacts } from "../services/api";
 import { ToastContainer, toast } from "react-toastify";
-import {FaQuoteLeft} from "react-icons/fa"
+import {
+  FaProjectDiagram,
+  FaQuoteLeft,
+  FaImages,
+  FaEnvelope,
+  FaHome,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 
-const ManageContacts = () => {
+const AdminDashboard = () => {
   const [contacts, setContacts] = useState([]);
-  const { adminToken } = useContext(AuthContext);
+  const { adminToken, logout } = useContext(AuthContext);
+  const location = useLocation();
 
   useEffect(() => {
     const loadContacts = async () => {
@@ -18,161 +29,167 @@ const ManageContacts = () => {
         setContacts(data);
       } catch (error) {
         console.error("Error fetching contacts:", error);
-        toast.error("Failed to fetch contacts.");
       }
     };
-    loadContacts();
+    if (adminToken) {
+      loadContacts();
+    }
   }, [adminToken]);
 
-  const handleReply = async (email) => {
-    try {
-      const message = prompt("Enter your reply message:");
-      if (!message) return;
-      await replyToContact(email, message, adminToken);
-      toast.success(`Reply sent to ${email}`);
-    } catch (error) {
-      console.error("Error sending reply:", error);
-      toast.error("Failed to send reply.");
-    }
-  };
-
-  return (
-    <div>
-      <h3 className="text-2xl font-bold mb-4">Manage Contacts</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {contacts.map((contact) => (
-          <div
-            key={contact._id}
-            className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300"
-          >
-            <h4 className="text-lg font-bold">{contact.name}</h4>
-            <p className="text-sm text-gray-400">{contact.email}</p>
-            <p className="text-sm text-gray-400">{contact.message}</p>
-            <button
-              onClick={() => handleReply(contact.email)}
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300"
-            >
-              Reply
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
+  const newContacts = contacts.filter(
+    (contact) =>
+      !contact.replied &&
+      new Date(contact.createdAt) > new Date(Date.now() - 24 * 60 * 60 * 1000)
   );
-};
 
-const AdminDashboard = () => {
-  const { logout } = useContext(AuthContext);
-  const [contacts, setContacts] = useState([]);
-  const [newContacts, setNewContacts] = useState([]);
-
-  const handleLogout = () => {
-    logout();
-    toast.success("Logged out successfully!");
-  };
-
-  useEffect(() => {
-    const loadContacts = async () => {
-      try {
-        const data = await fetchContacts();
-        setContacts(data);
-
-        // Filter new/unviewed contacts
-        const unviewedContacts = data.filter((contact) => !contact.viewed);
-        setNewContacts(unviewedContacts);
-
-        if (unviewedContacts.length > 0) {
-          toast.info(`You have ${unviewedContacts.length} new contact(s)!`);
-        }
-      } catch (error) {
-        console.error("Error fetching contacts:", error);
-        toast.error("Failed to fetch contacts.");
-      }
-    };
-
-    // Poll every 30 seconds
-    const interval = setInterval(loadContacts, 30000);
-    return () => clearInterval(interval);
-  }, []);
+  const navItems = [
+    { path: "/admin", icon: FaHome, label: "Dashboard", exact: true },
+    {
+      path: "/admin/projects",
+      icon: FaProjectDiagram,
+      label: "Manage Projects",
+    },
+    {
+      path: "/admin/testimonials",
+      icon: FaQuoteLeft,
+      label: "Manage Testimonials",
+    },
+    { path: "/admin/gallery", icon: FaImages, label: "Manage Gallery" },
+    {
+      path: "/admin/contacts",
+      icon: FaEnvelope,
+      label: "Manage Contacts",
+      badge: newContacts.length,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      <header className="bg-gray-800 p-4 shadow-lg">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition duration-300"
-          >
-            Logout
-          </button>
+      {/* Header */}
+      <header className="bg-gray-800 shadow-lg">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl font-bold text-blue-400">
+              Admin Dashboard
+            </h1>
+            <button
+              onClick={logout}
+              className="flex items-center space-x-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded transition duration-300"
+            >
+              <FaSignOutAlt />
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
       </header>
-      <div className="container mx-auto p-6">
-        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-          {/* New Contacts Section */}
-          {newContacts.length > 0 && (
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold mb-4 text-green-500">
-                New Contacts
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {newContacts.map((contact) => (
-                  <div
-                    key={contact._id}
-                    className="bg-green-700 p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300"
-                  >
-                    <h4 className="text-lg font-bold">{contact.name}</h4>
-                    <p className="text-sm text-gray-200">{contact.email}</p>
-                    <p className="text-sm text-gray-200">{contact.message}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
+      <div className="flex">
+        {/* Sidebar */}
+        <nav className="w-64 bg-gray-800 min-h-screen shadow-lg">
+          <div className="p-6">
+            <ul className="space-y-2">
+              {navItems.map(({ path, icon: Icon, label, exact, badge }) => {
+                const isActive = exact
+                  ? location.pathname === path
+                  : location.pathname.startsWith(path);
+
+                return (
+                  <li key={path}>
+                    <Link
+                      to={path}
+                      className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
+                        isActive
+                          ? "bg-blue-600 text-white"
+                          : "hover:bg-gray-700 text-gray-300"
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <Icon className="text-lg" />
+                        <span>{label}</span>
+                      </div>
+                      {badge > 0 && (
+                        <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                          {badge}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </nav>
+
+        {/* Main Content */}
+        <main className="flex-1 p-6">
           <Routes>
             <Route
-              index
+              path="/"
               element={
-                <div className="text-center">
-                  <h2 className="text-3xl font-bold mb-4">
-                    Welcome to the Admin Dashboard
+                <div className="text-center py-12">
+                  <h2 className="text-4xl font-bold mb-6 text-blue-400">
+                    Welcome to Admin Dashboard
                   </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+                    <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-gray-400">Total Contacts</p>
+                          <p className="text-2xl font-bold">
+                            {contacts.length}
+                          </p>
+                        </div>
+                        <FaEnvelope className="text-3xl text-blue-400" />
+                      </div>
+                    </div>
+                    <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-gray-400">New Contacts</p>
+                          <p className="text-2xl font-bold text-green-400">
+                            {newContacts.length}
+                          </p>
+                        </div>
+                        <FaEnvelope className="text-3xl text-green-400" />
+                      </div>
+                    </div>
+                    <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-gray-400">Projects</p>
+                          <p className="text-2xl font-bold">-</p>
+                        </div>
+                        <FaProjectDiagram className="text-3xl text-purple-400" />
+                      </div>
+                    </div>
+                    <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-gray-400">Gallery Items</p>
+                          <p className="text-2xl font-bold">-</p>
+                        </div>
+                        <FaImages className="text-3xl text-yellow-400" />
+                      </div>
+                    </div>
+                  </div>
                   {newContacts.length > 0 && (
-                    <p className="text-green-500">
-                      You have {newContacts.length} new contact(s)!
-                    </p>
+                    <div className="mt-8 p-4 bg-green-900 border border-green-600 rounded-lg">
+                      <p className="text-green-300 font-semibold">
+                        🎉 You have {newContacts.length} new contact message(s)!
+                      </p>
+                    </div>
                   )}
                 </div>
               }
             />
             <Route path="projects" element={<ManageProjects />} />
+            <Route path="testimonials" element={<ManageTestimonials />} />
+            <Route path="gallery" element={<ManageGallery />} />
             <Route path="contacts" element={<ManageContacts />} />
           </Routes>
-          <nav className="mb-6 flex space-x-4">
-            <Link
-              to="projects"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-300"
-            >
-              Manage Projects
-            </Link>
-            <Link
-              to="contacts"
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition duration-300"
-            >
-              Manage Contacts
-            </Link>
-            <Link
-              to="/admin/testimonials"
-              className="flex items-center p-3 rounded-lg hover:bg-gray-800 transition-colors"
-            >
-              <FaQuoteLeft className="mr-3 text-purple-400" />
-              <span>Manage Testimonials</span>
-            </Link>
-          </nav>
-        </div>
+        </main>
       </div>
+
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );

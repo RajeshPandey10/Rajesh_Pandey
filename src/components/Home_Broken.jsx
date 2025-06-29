@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Image as ImageIcon,
+  Play,
   ExternalLink,
 } from "lucide-react";
 import { fetchTestimonials, fetchGallery } from "../services/api";
@@ -31,46 +32,7 @@ const Home = () => {
         setGallery(galleryData.items || galleryData); // Handle paginated response
       } catch (error) {
         console.error("Error loading data:", error);
-        // Fallback to mock data if API fails
-        setTestimonials([
-          {
-            id: 1,
-            name: "Amit Sharma",
-            role: "Project Manager at TechCorp",
-            photo:
-              "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
-            message:
-              "Rajesh delivered an exceptional web application for our company. His expertise in MERN stack is outstanding!",
-            rating: 5,
-          },
-          {
-            id: 2,
-            name: "Priya Thapa",
-            role: "CEO of Digital Solutions",
-            photo:
-              "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=100&h=100&fit=crop&crop=face",
-            message:
-              "Working with Rajesh was a game-changer for our startup. His full-stack development skills helped us launch our product successfully.",
-            rating: 5,
-          },
-        ]);
-
-        setGallery([
-          {
-            id: 1,
-            title: "Workspace Setup",
-            image:
-              "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=300&fit=crop",
-            category: "workspace",
-          },
-          {
-            id: 2,
-            title: "Team Collaboration",
-            image:
-              "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop",
-            category: "work",
-          },
-        ]);
+        // Fallback to mock data if API fail
       } finally {
         setLoading(false);
       }
@@ -91,49 +53,65 @@ const Home = () => {
 
   return (
     <div>
-      {/* Hero Section - Image and Description */}
-      <section className="bg-gradient-to-br from-slate-50 to-blue-50 pt-20 pb-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-12 min-h-[80vh]">
-            
-            {/* Left Content - Hero Image */}
-            <div className="flex-1 flex justify-center lg:justify-start order-1">
-              <div className="relative">
-                <div className="w-80 h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-8 border-white shadow-2xl bg-gradient-to-br from-blue-100 to-indigo-100">
-                  <img
-                    src={heroPhoto}
-                    alt="Rajesh Pandey - Full Stack Web Developer"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                {/* Decorative elements */}
-                <div className="absolute -top-4 -right-4 w-8 h-8 bg-blue-600 rounded-full animate-pulse"></div>
-                <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-indigo-500 rounded-full animate-pulse delay-1000"></div>
-              </div>
+      {/* Hero Image Section - Full width at top */}
+      <section className="relative h-[70vh] min-h-[500px] overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={heroPhoto}
+            alt="Rajesh Pandey - Full Stack Web Developer"
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
+        </div>
+
+        {/* Hero Content Overlay */}
+        <div className="relative z-10 h-full flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+            <h1 className="text-5xl lg:text-7xl font-bold mb-4">
+              <span className="text-white">Hi, I'm</span>{" "}
+              <span className="text-blue-400 font-bold">राजेश</span>
+            </h1>
+            <h2 className="text-2xl lg:text-4xl font-medium mb-6 text-blue-100">
+              Full Stack Web Developer
+            </h2>
+            <p className="text-lg lg:text-xl text-gray-200 max-w-2xl mb-8">
+              Professional MERN Stack Developer from Nepal 🇳🇵 with 3+ years of
+              experience creating modern, scalable web applications.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                Hire Me
+              </button>
+              <button className="px-8 py-3 border border-white text-white font-medium rounded-lg hover:bg-white hover:text-gray-900 transition-colors duration-200">
+                View Resume
+              </button>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Right Content - Description */}
-            <div className="flex-1 text-left lg:pl-12 order-2">
-              {/* Main Heading */}
-              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-                Hi, I'm{" "}
-                <span className="text-blue-600 font-bold text-6xl lg:text-7xl">
-                  राजेश
-                </span>
-              </h1>
+      {/* Main Content Section */}
+      <section className="bg-gradient-to-br from-slate-50 to-blue-50 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Introduction Content */}
+          <div className="text-center mb-16">
+            <div className="max-w-4xl mx-auto">
+              <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+                About Rajesh Pandey
+              </h3>
 
-              <h2 className="text-2xl lg:text-3xl font-medium text-gray-700 mb-6">
-                Full Stack Web Developer
-              </h2>
-
-              {/* Description */}
-              <div className="text-lg text-gray-600 mb-8 space-y-4">
-                <p>
-                  <strong className="text-gray-900">
-                    Rajesh Pandey - Professional Full Stack Web Developer from
-                    Nepal 🇳🇵
-                  </strong>
+              {/* Sanskrit Shloka */}
+              <div className="bg-white rounded-xl p-6 mb-8 shadow-lg border border-blue-100">
+                <p className="text-lg text-gray-700 italic mb-2 font-serif">
+                  "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।"
                 </p>
+                <p className="text-sm text-gray-500">
+                  "You have the right to perform your actions, but never to the
+                  fruits of action."
+                </p>
+              </div>
+
+              <div className="text-lg text-gray-600 space-y-4 text-left">
                 <p>
                   I'm Rajesh Pandey, a dedicated Computer Engineering student in
                   my 7th semester, specializing in MERN Stack development
@@ -143,17 +121,18 @@ const Home = () => {
                 </p>
                 <p>
                   Currently working as an Associate Backend Developer at Covosys
-                  and MERN Developer and AI/ML trainer at YOUTH IT, I focus on building efficient,
-                  user-friendly solutions that make a difference.
+                  and MERN Developer and AI/ML trainer at YOUTH IT, I focus on
+                  building efficient, user-friendly solutions that make a
+                  difference.
                 </p>
               </div>
 
               {/* Skills Tags */}
-              <div className="mb-8">
-                <p className="text-gray-700 font-medium mb-3">
+              <div className="mt-8">
+                <p className="text-gray-700 font-medium mb-4 text-xl">
                   🚀 Technical Expertise:
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-3 justify-center">
                   {[
                     "React.js",
                     "Node.js",
@@ -166,41 +145,13 @@ const Home = () => {
                   ].map((skill, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
+                      className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors"
                     >
                       {skill}
                     </span>
                   ))}
                 </div>
               </div>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                  Hire Me
-                </button>
-                <button className="px-8 py-3 border border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-colors duration-200">
-                  View Resume
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Additional Content Section */}
-      <section className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Sanskrit Shloka */}
-          <div className="text-center mb-16">
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 shadow-lg border border-blue-100 max-w-4xl mx-auto">
-              <p className="text-xl text-gray-700 italic mb-3 font-serif">
-                "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।"
-              </p>
-              <p className="text-sm text-gray-500">
-                "You have the right to perform your actions, but never to the
-                fruits of action."
-              </p>
             </div>
           </div>
 

@@ -1,312 +1,202 @@
 import React from "react";
-import { motion } from "framer-motion";
-import {
-  FaSuitcase,
-  FaCalendarAlt,
-  FaMapMarkerAlt,
-  FaCode,
-  FaLaptopCode,
-  FaServer,
-} from "react-icons/fa";
+import { MapPin, Calendar, ExternalLink, Briefcase, Award } from "lucide-react";
 
 const Experience = () => {
   const experiences = [
     {
-      title: "Associate Backend Developer at Covosys",
+      company: "YOUTHIT",
+      position: "MERN Stack Developer & AI/ML Instructor/Trainer",
+      location: "Pragati Chowk, Itahari",
+      duration: "1 Month (Current)",
+      description:
+        "Leading full-stack development projects using MERN stack while training aspiring developers in modern web technologies and AI/ML fundamentals. Developing innovative solutions and mentoring students in practical programming skills.",
+      current: true,
+    },
+    {
       company: "Covosys",
+      position: "Associate Backend Developer",
       location: "Remote",
-      period: "7 Months (Current)",
+      duration: "7 Months",
       description:
-        "Developing and maintaining backend services using Node.js and Express. Integrating third-party APIs and optimizing database queries. Building RESTful APIs for web applications.",
-      color: "blue",
-      icon: <FaServer className="text-blue-400" size={20} />,
+        "Developed and maintained backend services using Node.js and Express. Integrated third-party APIs and optimized database queries. Built RESTful APIs for web applications with focus on scalability and performance.",
+      current: false,
     },
     {
-      title: "MERN Intern at Lunar IT",
       company: "Lunar IT",
+      position: "MERN Stack Intern",
       location: "Remote",
-      period: "2 Months (Current)",
+      duration: "2 Months",
       description:
-        "Collaborating on full-stack projects using the MERN stack (MongoDB, Express, React, Node.js). Creating dynamic user interfaces and RESTful APIs. Working in an agile team environment.",
-      color: "purple",
-      icon: <FaLaptopCode className="text-purple-400" size={20} />,
+        "Collaborated on full-stack projects using the MERN stack (MongoDB, Express, React, Node.js). Created dynamic user interfaces and RESTful APIs. Worked in an agile team environment with modern development practices.",
+      current: false,
     },
     {
-      title: "Virtual Intern at Codesoft",
       company: "Codesoft",
+      position: "Virtual Intern",
       location: "Remote",
-      period: "1 Month",
+      duration: "1 Month",
       description:
-        "Worked on building scalable backend systems and APIs for e-commerce platforms. Implemented secure authentication and payment gateway integrations.",
-      color: "green",
-      icon: <FaCode className="text-emerald-400" size={20} />,
+        "Worked on building scalable backend systems and APIs for e-commerce platforms. Implemented secure authentication and payment gateway integrations using industry best practices.",
+      current: false,
     },
     {
-      title: "Freelance Web Developer",
       company: "Self-employed",
+      position: "Freelance Web Developer",
       location: "Kathmandu, Nepal",
-      period: "2022 - Present",
+      duration: "2022 - Present",
       description:
-        "Designed and developed custom websites and web applications for various clients. Focused on responsive design, performance optimization, and SEO best practices.",
-      color: "red",
-      icon: <FaLaptopCode className="text-red-400" size={20} />,
+        "Designed and developed custom websites and web applications for various clients. Focused on responsive design, performance optimization, and SEO best practices while delivering high-quality solutions.",
+      current: true,
     },
   ];
 
   const projects = [
     {
+      title: "Panas - Korean Consultancy Exam Platform",
+      tech: "MERN Stack, Redux, Socket.io, JWT",
+      duration: "4 months",
+      description:
+        "Built a comprehensive exam management system for Korean language consultancy. Features include super admin dashboard, institute management, exam creation, real-time proctoring, and automated grading with detailed analytics.",
+    },
+    {
       title: "E-commerce Platform",
-      technologies: "MERN Stack, Redux, Stripe",
+      tech: "MERN Stack, Redux, Stripe",
       duration: "3 months",
       description:
         "Built a full-featured e-commerce platform with product catalog, shopping cart, user authentication, and payment processing.",
-      color: "yellow",
-      icon: <FaLaptopCode className="text-yellow-400" size={20} />,
-    },
-    {
-      title: "Real-time Chat Application",
-      technologies: "Socket.io, React, Express, MongoDB",
-      duration: "2 months",
-      description:
-        "Developed a real-time messaging application with features like user presence, message notifications, and message history.",
-      color: "indigo",
-      icon: <FaCode className="text-indigo-400" size={20} />,
     },
     {
       title: "Task Management System",
-      technologies: "React, Node.js, PostgreSQL",
-      duration: "1 month",
+      tech: "React, Node.js, PostgreSQL",
+      duration: "2 months",
       description:
         "Created a collaborative task management system with role-based access control, task assignments, and deadline notifications.",
-      color: "teal",
-      icon: <FaServer className="text-teal-400" size={20} />,
     },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { x: -50, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 100 },
-    },
-  };
-
-  const getColor = (color) => {
-    switch (color) {
-      case "blue":
-        return "from-blue-500 to-blue-600 border-blue-400 shadow-blue-400/20";
-      case "purple":
-        return "from-purple-500 to-purple-600 border-purple-400 shadow-purple-400/20";
-      case "green":
-        return "from-emerald-500 to-emerald-600 border-emerald-400 shadow-emerald-400/20";
-      case "red":
-        return "from-red-500 to-red-600 border-red-400 shadow-red-400/20";
-      case "yellow":
-        return "from-yellow-500 to-amber-600 border-yellow-400 shadow-yellow-400/20";
-      case "indigo":
-        return "from-indigo-500 to-indigo-600 border-indigo-400 shadow-indigo-400/20";
-      case "teal":
-        return "from-teal-500 to-teal-600 border-teal-400 shadow-teal-400/20";
-      default:
-        return "from-gray-500 to-gray-600 border-gray-400 shadow-gray-400/20";
-    }
-  };
-
   return (
-    <section
-      id="experience"
-      className="bg-gradient-to-b from-gray-900 to-black text-white"
-    >
-      <div className="container mx-auto px-6 py-5">
-        {/* Professional Experience Section */}
-        <motion.h2
-          className="text-5xl font-bold text-center mb-16 relative"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-        >
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-            Professional Experience
-          </span>
-          <motion.span
-            className="absolute bottom-0 left-1/2 w-20 h-1 bg-blue-500 rounded-full"
-            initial={{ width: 0, x: "-50%" }}
-            whileInView={{ width: 80, x: "-50%" }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          ></motion.span>
-        </motion.h2>
-
-        <div className="relative mb-24">
-          {/* Timeline line */}
-          <motion.div
-            className="absolute left-6 md:left-1/2 w-1 h-full transform -translate-x-1/2 bg-gradient-to-b from-blue-500 via-purple-500 to-blue-500 rounded-full z-0"
-            initial={{ scaleY: 0 }}
-            whileInView={{ scaleY: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.5 }}
-          />
-
-          {/* Experience items */}
-          <motion.div
-            className="relative z-10"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-          >
-            {experiences.map((exp, index) => (
-              <motion.div
-                key={index}
-                className="mb-12 relative"
-                variants={itemVariants}
-              >
-                <div
-                  className={`flex flex-col ${
-                    index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                  } items-center`}
-                >
-                  {/* Timeline dot */}
-                  <motion.div
-                    className={`absolute left-6 md:left-1/2 w-6 h-6 rounded-full bg-gradient-to-r ${getColor(
-                      exp.color
-                    )} transform -translate-x-1/2 border-2 border-gray-900 z-20 flex items-center justify-center`}
-                    whileHover={{ scale: 1.5 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <span className="opacity-0 hover:opacity-100 absolute -top-10 bg-gray-800 px-2 py-1 rounded text-xs whitespace-nowrap">
-                      {exp.period}
-                    </span>
-                  </motion.div>
-
-                  {/* Content card */}
-                  <motion.div
-                    className={`w-full md:w-5/12 ${
-                      index % 2 === 0 ? "md:pr-12 md:text-right" : "md:pl-12"
-                    }`}
-                    whileHover={{ scale: 1.03 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <div
-                      className={`p-6 bg-gray-800/60 backdrop-blur-sm rounded-xl shadow-xl border border-gray-700 hover:shadow-2xl transition-all duration-500`}
-                    >
-                      <div className="flex items-center gap-2 mb-2">
-                        {exp.icon}
-                        <h3
-                          className={`text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${getColor(
-                            exp.color
-                          )}`}
-                        >
-                          {exp.title}
-                        </h3>
-                      </div>
-
-                      <div
-                        className={`flex flex-wrap items-center gap-3 mt-2 ${
-                          index % 2 === 0 ? "md:justify-end" : ""
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <FaSuitcase className="mr-2 text-gray-400" />
-                          <span className="text-gray-300">{exp.company}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <FaMapMarkerAlt className="mr-2 text-gray-400" />
-                          <span className="text-gray-300">{exp.location}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center mt-2">
-                        <FaCalendarAlt className="mr-2 text-gray-400" />
-                        <span className="text-gray-300">{exp.period}</span>
-                      </div>
-
-                      <p className="mt-4 text-gray-300">{exp.description}</p>
-                    </div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+    <section className="py-24 bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full text-blue-700 text-sm font-medium mb-6">
+            <Briefcase className="w-4 h-4" />
+            Professional Journey
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+            Experience & Projects
+          </h2>
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            Building innovative solutions and gaining valuable experience across
+            various roles and projects.
+          </p>
         </div>
 
-        {/* Projects Section */}
-        <motion.h2
-          className="text-5xl font-bold text-center mb-16 relative"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-        >
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500">
-            Notable Projects
-          </span>
-          <motion.span
-            className="absolute bottom-0 left-1/2 w-20 h-1 bg-yellow-500 rounded-full"
-            initial={{ width: 0, x: "-50%" }}
-            whileInView={{ width: 80, x: "-50%" }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          ></motion.span>
-        </motion.h2>
-
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-        >
-          {projects.map((project, index) => (
-            <motion.div
+        {/* Experience Timeline */}
+        <div className="space-y-6 mb-20">
+          {experiences.map((exp, index) => (
+            <div
               key={index}
-              className="bg-gray-800/60 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-700 hover:border-gray-500 transition-all duration-300"
-              variants={itemVariants}
-              whileHover={{
-                y: -10,
-                boxShadow:
-                  "0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)",
-              }}
+              className="group bg-white rounded-2xl border border-slate-200 p-8 hover:border-blue-300 hover:shadow-xl transition-all duration-300"
             >
-              <div
-                className={`h-2 bg-gradient-to-r ${getColor(project.color)}`}
-              ></div>
-              <div className="p-6">
-                <div className="flex items-center gap-2 mb-3">
-                  {project.icon}
-                  <h3 className="text-xl font-bold text-white">
-                    {project.title}
-                  </h3>
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                      <Briefcase className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                        {exp.position}
+                      </h3>
+                      <p className="text-lg font-semibold text-blue-600">
+                        {exp.company}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-4 mb-4">
+                    <div className="flex items-center gap-2 text-slate-600">
+                      <MapPin className="w-4 h-4" />
+                      <span className="text-sm">{exp.location}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-slate-600">
+                      <Calendar className="w-4 h-4" />
+                      <span className="text-sm">{exp.duration}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center mb-3">
-                  <FaCode className="mr-2 text-gray-400" />
-                  <span className="text-gray-300 text-sm">
-                    {project.technologies}
-                  </span>
-                </div>
-                <div className="flex items-center mb-4">
-                  <FaCalendarAlt className="mr-2 text-gray-400" />
-                  <span className="text-gray-300 text-sm">
-                    {project.duration}
-                  </span>
-                </div>
-                <p className="text-gray-400">{project.description}</p>
+
+                {exp.current && (
+                  <div className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-xl text-sm font-medium mt-4 lg:mt-0">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    Current Position
+                  </div>
+                )}
               </div>
-            </motion.div>
+
+              <p className="text-slate-600 leading-relaxed text-lg">
+                {exp.description}
+              </p>
+            </div>
           ))}
-        </motion.div>
+        </div>
+
+        {/* Notable Projects */}
+        <div>
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full text-purple-700 text-sm font-medium mb-6">
+              <Award className="w-4 h-4" />
+              Featured Projects
+            </div>
+            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              Notable Projects
+            </h3>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              Showcasing some of the key projects that demonstrate my technical
+              skills and problem-solving abilities.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project, index) => (
+              <div
+                key={index}
+                className="group bg-white rounded-2xl border border-slate-200 p-6 hover:border-purple-300 hover:shadow-xl transition-all duration-300"
+              >
+                <div className="mb-4">
+                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                    <ExternalLink className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <h4 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-purple-600 transition-colors">
+                    {project.title}
+                  </h4>
+                </div>
+
+                <div className="mb-4">
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {project.tech.split(", ").map((tech, techIndex) => (
+                      <span
+                        key={techIndex}
+                        className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2 text-slate-500 text-sm">
+                    <Calendar className="w-4 h-4" />
+                    <span>Duration: {project.duration}</span>
+                  </div>
+                </div>
+
+                <p className="text-slate-600 leading-relaxed">
+                  {project.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

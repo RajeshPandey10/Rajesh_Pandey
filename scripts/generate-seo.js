@@ -1,25 +1,47 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Generate enhanced sitemap.xml
 const generateSitemap = () => {
-  const baseUrl = 'https://rajeshpandey10.com.np';
+  const baseUrl = "https://rajeshpandey10.com.np";
   const currentDate = new Date().toISOString();
 
   const pages = [
-    { url: '/', changefreq: 'daily', priority: '1.0', lastmod: currentDate },
-    { url: '/about', changefreq: 'weekly', priority: '0.9', lastmod: currentDate },
-    { url: '/portfolio', changefreq: 'weekly', priority: '0.9', lastmod: currentDate },
-    { url: '/contact', changefreq: 'monthly', priority: '0.8', lastmod: currentDate },
-    { url: '/services', changefreq: 'weekly', priority: '0.9', lastmod: currentDate },
-    { url: '/rajesh-pandey', changefreq: 'monthly', priority: '0.8', lastmod: currentDate },
-    { url: '/premium-content', changefreq: 'weekly', priority: '0.7', lastmod: currentDate },
-    { url: '/newsletter', changefreq: 'weekly', priority: '0.6', lastmod: currentDate },
-    { url: '/affiliate-recommendations', changefreq: 'weekly', priority: '0.5', lastmod: currentDate }
+    { url: "/", changefreq: "daily", priority: "1.0", lastmod: currentDate },
+    {
+      url: "/about",
+      changefreq: "weekly",
+      priority: "0.9",
+      lastmod: currentDate,
+    },
+    {
+      url: "/portfolio",
+      changefreq: "weekly",
+      priority: "0.9",
+      lastmod: currentDate,
+    },
+    {
+      url: "/contact",
+      changefreq: "monthly",
+      priority: "0.8",
+      lastmod: currentDate,
+    },
+    {
+      url: "/services",
+      changefreq: "weekly",
+      priority: "0.9",
+      lastmod: currentDate,
+    },
+    {
+      url: "/rajesh-pandey",
+      changefreq: "monthly",
+      priority: "0.8",
+      lastmod: currentDate,
+    },
   ];
 
   let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -27,14 +49,14 @@ const generateSitemap = () => {
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 `;
 
-  pages.forEach(page => {
+  pages.forEach((page) => {
     sitemap += `  <url>
     <loc>${baseUrl}${page.url}</loc>
     <lastmod>${page.lastmod}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>`;
 
-    if (page.url === '/') {
+    if (page.url === "/") {
       sitemap += `
     <image:image>
       <image:loc>${baseUrl}/assets/mymainphoto.png</image:loc>
@@ -118,8 +140,8 @@ Revisit-after: 7 days`;
 // Main function to generate SEO files
 const generateSEOFiles = () => {
   try {
-    const publicDir = path.join(__dirname, '..', 'public');
-    
+    const publicDir = path.join(__dirname, "..", "public");
+
     // Ensure public directory exists
     if (!fs.existsSync(publicDir)) {
       fs.mkdirSync(publicDir, { recursive: true });
@@ -127,13 +149,13 @@ const generateSEOFiles = () => {
 
     // Generate sitemap.xml
     const sitemap = generateSitemap();
-    fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
-    console.log('✅ Generated sitemap.xml');
+    fs.writeFileSync(path.join(publicDir, "sitemap.xml"), sitemap);
+    console.log("✅ Generated sitemap.xml");
 
     // Generate robots.txt
     const robotsTxt = generateRobotsTxt();
-    fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
-    console.log('✅ Generated robots.txt');
+    fs.writeFileSync(path.join(publicDir, "robots.txt"), robotsTxt);
+    console.log("✅ Generated robots.txt");
 
     // Create .htaccess for Apache (if needed)
     const htaccess = `# Apache configuration for Rajesh Pandey Portfolio
@@ -176,18 +198,19 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>`;
 
-    fs.writeFileSync(path.join(publicDir, '.htaccess'), htaccess);
-    console.log('✅ Generated .htaccess');
+    fs.writeFileSync(path.join(publicDir, ".htaccess"), htaccess);
+    console.log("✅ Generated .htaccess");
 
-    console.log('\n🎉 SEO files generated successfully!');
-    console.log('📊 Next steps:');
-    console.log('1. Submit sitemap to Google Search Console');
-    console.log('2. Verify robots.txt at https://rajeshpandey10.com.np/robots.txt');
-    console.log('3. Test structured data with Google Rich Results Test');
+    console.log("\n🎉 SEO files generated successfully!");
+    console.log("📊 Next steps:");
+    console.log("1. Submit sitemap to Google Search Console");
+    console.log(
+      "2. Verify robots.txt at https://rajeshpandey10.com.np/robots.txt"
+    );
+    console.log("3. Test structured data with Google Rich Results Test");
     console.log('4. Monitor rankings for "Rajesh Pandey" keywords');
-
   } catch (error) {
-    console.error('❌ Error generating SEO files:', error);
+    console.error("❌ Error generating SEO files:", error);
     process.exit(1);
   }
 };

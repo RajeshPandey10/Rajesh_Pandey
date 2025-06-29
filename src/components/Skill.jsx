@@ -1,351 +1,365 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { wrap } from "@motionone/utils";
+import React, { useState } from "react";
+import {
+  SiReact,
+  SiNodedotjs,
+  SiMongodb,
+  SiExpress,
+  SiJavascript,
+  SiPython,
+  SiHtml5,
+  SiCss3,
+  SiTailwindcss,
+  SiGit,
+  SiGithub,
+  SiPostman,
+  SiMysql,
+  SiRedux,
+  SiBootstrap,
+  SiPandas,
+  SiNumpy,
+  SiTensorflow,
+  SiScikitlearn,
+  SiJupyter,
+  SiOpencv,
+} from "react-icons/si";
+import {
+  Code2,
+  Database,
+  Settings,
+  Layers,
+  Brain,
+  BarChart3,
+} from "lucide-react";
 
 const Skills = () => {
-  const [activeFilter, setActiveFilter] = useState("All");
-  const [filtered, setFiltered] = useState([]);
-  const [visibleSkills, setVisibleSkills] = useState([]);
-  const [isHovering, setIsHovering] = useState(null);
+  const [activeCategory, setActiveCategory] = useState("All");
 
-  const categories = [
-    "All",
-    "Frontend",
-    "Backend",
-    "Database",
-    "Language",
-    "Animation",
+  const skillCategories = [
+    { name: "All", icon: <Layers className="w-4 h-4" /> },
+    { name: "Frontend", icon: <Code2 className="w-4 h-4" /> },
+    { name: "Backend", icon: <Settings className="w-4 h-4" /> },
+    { name: "Database", icon: <Database className="w-4 h-4" /> },
+    { name: "AI/ML", icon: <Brain className="w-4 h-4" /> },
+    { name: "Tools", icon: <BarChart3 className="w-4 h-4" /> },
   ];
 
-  const skillData = [
+  const skillsData = [
+    // Frontend
     {
       name: "React.js",
+      icon: <SiReact />,
       category: "Frontend",
-      level: 90,
-      description: "Building dynamic UIs and SPAs.",
-      image: "https://cdn-icons-png.flaticon.com/512/919/919851.png",
-    },
-    {
-      name: "Node.js",
-      category: "Backend",
-      level: 85,
-      description: "Server-side development and APIs.",
-      image: "https://cdn-icons-png.flaticon.com/512/919/919825.png",
-    },
-    {
-      name: "MongoDB",
-      category: "Database",
-      level: 80,
-      description: "NoSQL database management.",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMzlF0cI1C-682U2HcOpqjigAIxmhmEuBmdA&s",
-    },
-    {
-      name: "Tailwind CSS",
-      category: "Frontend",
-      level: 95,
-      description: "Modern, responsive styling.",
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/2560px-Tailwind_CSS_Logo.svg.png",
-    },
-    {
-      name: "MySQL",
-      category: "Database",
-      level: 75,
-      description: "Relational database management.",
-      image: "https://cdn-icons-png.flaticon.com/512/919/919836.png",
-    },
-    {
-      name: "C",
-      category: "Language",
-      level: 70,
-      description: "General-purpose programming language.",
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/C_Programming_Language.svg/1200px-C_Programming_Language.svg.png",
-    },
-    {
-      name: "C++",
-      category: "Language",
-      level: 80,
-      description: "Object-oriented programming language.",
-      image:
-        "https://w7.pngwing.com/pngs/646/751/png-transparent-the-c-programming-language-computer-programming-programmer-others-blue-class-logo-thumbnail.png",
-    },
-    {
-      name: "Python",
-      category: "Language",
-      level: 85,
-      description: "Used for web development and machine learning projects.",
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1200px-Python-logo-notext.svg.png",
+      level: "95%",
+      color: "text-cyan-500",
+      bgColor: "bg-cyan-50",
     },
     {
       name: "JavaScript",
-      category: "Language",
-      level: 95,
-      description: "High-level, dynamic programming language.",
-      image: "https://cdn-icons-png.flaticon.com/512/919/919828.png",
+      icon: <SiJavascript />,
+      category: "Frontend",
+      level: "90%",
+      color: "text-yellow-500",
+      bgColor: "bg-yellow-50",
     },
     {
-      name: "GSAP",
-      category: "Animation",
-      level: 75,
-      description: "JavaScript library for animations.",
-      image:
-        "https://pbs.twimg.com/profile_images/1713633504431394816/h28jJ1qM_400x400.jpg",
+      name: "HTML5",
+      icon: <SiHtml5 />,
+      category: "Frontend",
+      level: "95%",
+      color: "text-orange-500",
+      bgColor: "bg-orange-50",
     },
     {
-      name: "Framer Motion",
-      category: "Animation",
-      level: 80,
-      description: "Production-ready animation library for React.",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh4W9UdwgDLj84iQghY9wW24eJvc_m5QFXmg&s",
+      name: "CSS3",
+      icon: <SiCss3 />,
+      category: "Frontend",
+      level: "90%",
+      color: "text-blue-500",
+      bgColor: "bg-blue-50",
+    },
+    {
+      name: "Tailwind CSS",
+      icon: <SiTailwindcss />,
+      category: "Frontend",
+      level: "85%",
+      color: "text-teal-500",
+      bgColor: "bg-teal-50",
+    },
+    {
+      name: "Bootstrap",
+      icon: <SiBootstrap />,
+      category: "Frontend",
+      level: "80%",
+      color: "text-purple-500",
+      bgColor: "bg-purple-50",
+    },
+    {
+      name: "Redux",
+      icon: <SiRedux />,
+      category: "Frontend",
+      level: "75%",
+      color: "text-violet-500",
+      bgColor: "bg-violet-50",
+    },
+
+    // Backend
+    {
+      name: "Node.js",
+      icon: <SiNodedotjs />,
+      category: "Backend",
+      level: "90%",
+      color: "text-green-500",
+      bgColor: "bg-green-50",
+    },
+    {
+      name: "Express.js",
+      icon: <SiExpress />,
+      category: "Backend",
+      level: "85%",
+      color: "text-gray-600",
+      bgColor: "bg-gray-50",
+    },
+    {
+      name: "Python",
+      icon: <SiPython />,
+      category: "Backend",
+      level: "80%",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
+    },
+
+    // Database
+    {
+      name: "MongoDB",
+      icon: <SiMongodb />,
+      category: "Database",
+      level: "85%",
+      color: "text-green-600",
+      bgColor: "bg-green-50",
+    },
+    {
+      name: "MySQL",
+      icon: <SiMysql />,
+      category: "Database",
+      level: "75%",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
+    },
+
+    // Tools
+    {
+      name: "Git",
+      icon: <SiGit />,
+      category: "Tools",
+      level: "90%",
+      color: "text-orange-600",
+      bgColor: "bg-orange-50",
+    },
+    {
+      name: "GitHub",
+      icon: <SiGithub />,
+      category: "Tools",
+      level: "90%",
+      color: "text-gray-700",
+      bgColor: "bg-gray-50",
+    },
+    {
+      name: "Postman",
+      icon: <SiPostman />,
+      category: "Tools",
+      level: "80%",
+      color: "text-orange-500",
+      bgColor: "bg-orange-50",
+    },
+
+    // AI/ML
+    {
+      name: "Pandas",
+      icon: <SiPandas />,
+      category: "AI/ML",
+      level: "85%",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
+    },
+    {
+      name: "NumPy",
+      icon: <SiNumpy />,
+      category: "AI/ML",
+      level: "80%",
+      color: "text-cyan-600",
+      bgColor: "bg-cyan-50",
+    },
+    {
+      name: "TensorFlow",
+      icon: <SiTensorflow />,
+      category: "AI/ML",
+      level: "75%",
+      color: "text-orange-600",
+      bgColor: "bg-orange-50",
+    },
+    {
+      name: "Scikit-learn",
+      icon: <SiScikitlearn />,
+      category: "AI/ML",
+      level: "70%",
+      color: "text-yellow-600",
+      bgColor: "bg-yellow-50",
+    },
+    {
+      name: "Jupyter",
+      icon: <SiJupyter />,
+      category: "AI/ML",
+      level: "85%",
+      color: "text-orange-500",
+      bgColor: "bg-orange-50",
+    },
+    {
+      name: "OpenCV",
+      icon: <SiOpencv />,
+      category: "AI/ML",
+      level: "65%",
+      color: "text-green-600",
+      bgColor: "bg-green-50",
+    },
+    {
+      name: "Matplotlib",
+      icon: <BarChart3 />,
+      category: "AI/ML",
+      level: "80%",
+      color: "text-purple-600",
+      bgColor: "bg-purple-50",
+    },
+    {
+      name: "Seaborn",
+      icon: <BarChart3 />,
+      category: "AI/ML",
+      level: "75%",
+      color: "text-indigo-600",
+      bgColor: "bg-indigo-50",
     },
   ];
 
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const skillVariants = {
-    hidden: { y: 20, opacity: 0 },
-    show: {
-      y: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 100 },
-    },
-    hover: {
-      scale: 1.05,
-      boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)",
-      transition: { type: "spring", stiffness: 300, damping: 10 },
-    },
-  };
-
-  const filterVariants = {
-    inactive: { scale: 1, color: "#ffffff" },
-    active: {
-      scale: 1.1,
-      color: "#ef4444",
-      fontWeight: 700, // Use numeric value instead of "bold"
-      transition: { type: "spring", stiffness: 300 },
-    },
-  };
-
-  // Filter skills based on category
-  useEffect(() => {
-    if (activeFilter === "All") {
-      setFiltered(skillData);
-
-      // Add skills with staggered delay for initial animation
-      const timer = setTimeout(() => {
-        setVisibleSkills(skillData);
-      }, 500);
-
-      return () => clearTimeout(timer);
-    } else {
-      const filteredData = skillData.filter(
-        (skill) => skill.category === activeFilter
-      );
-      setFiltered(filteredData);
-
-      // Reset and then set visible skills with animation
-      setVisibleSkills([]);
-      const timer = setTimeout(() => {
-        setVisibleSkills(filteredData);
-      }, 300);
-
-      return () => clearTimeout(timer);
-    }
-  }, [activeFilter]);
-
-  // Handle skill animation on interval
-  useEffect(() => {
-    if (isHovering) return;
-
-    const interval = setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * filtered.length);
-      setIsHovering(randomIndex);
-
-      const timeout = setTimeout(() => {
-        setIsHovering(null);
-      }, 1500);
-
-      return () => clearTimeout(timeout);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [filtered, isHovering]);
+  const filteredSkills =
+    activeCategory === "All"
+      ? skillsData
+      : skillsData.filter((skill) => skill.category === activeCategory);
 
   return (
     <section
       id="skills"
-      className="bg-gradient-to-b from-gray-900 to-black w-full  px-8 lg:px-16 overflow-hidden"
+      className="py-24 bg-gradient-to-br from-blue-50 to-indigo-50"
     >
-      <div className="max-w-6xl py-5 mx-auto text-center">
-        <motion.h2
-          className="text-orange-500 text-3xl lg:text-5xl font-bold mb-12"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          My Skills
-        </motion.h2>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full text-blue-700 text-sm font-medium mb-6">
+            <Code2 className="w-4 h-4" />
+            Skills & Technologies
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+            Technical Expertise
+          </h2>
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            Specialized in modern web technologies and full-stack development
+            with a focus on creating scalable, efficient solutions.
+          </p>
+        </div>
 
-        {/* Filter buttons */}
-        <motion.div
-          className="flex flex-wrap justify-center gap-4 mb-12"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-        >
-          {categories.map((category, index) => (
-            <motion.button
-              key={index}
-              onClick={() => setActiveFilter(category)}
-              className={`px-6 py-2 rounded-full ${
-                activeFilter === category
-                  ? "bg-red-500 text-white"
-                  : "bg-gray-800 text-white hover:bg-gray-700"
-              } transition-all duration-300`}
-              variants={filterVariants}
-              initial="inactive"
-              animate={activeFilter === category ? "active" : "inactive"}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+        {/* Category Filter */}
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
+          {skillCategories.map((category) => (
+            <button
+              key={category.name}
+              onClick={() => setActiveCategory(category.name)}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
+                activeCategory === category.name
+                  ? "bg-blue-600 text-white shadow-lg"
+                  : "bg-white text-slate-600 hover:bg-slate-50 border border-slate-200"
+              }`}
             >
-              {category}
-            </motion.button>
+              {category.icon}
+              {category.name}
+            </button>
           ))}
-        </motion.div>
+        </div>
 
-        {/* Skills grid */}
-        <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-        >
-          <AnimatePresence mode="popLayout">
-            {" "}
-            {/* Changed from "wait" to "popLayout" */}
-            {filtered.map((skill, index) => (
-              <motion.div
-                key={`${skill.name}-${activeFilter}`} // Unique key for each filter
-                layoutId={`${skill.name}-${activeFilter}`}
-                variants={skillVariants}
-                initial="hidden"
-                animate={isHovering === index ? "hover" : "show"}
-                exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-                whileHover="hover"
-                className="bg-gradient-to-tr from-gray-800 to-gray-700 rounded-xl p-6 flex flex-col items-center justify-between h-full shadow-lg relative overflow-hidden"
-              >
-                {/* Skill level indicator */}
-                <motion.div
-                  className="absolute bottom-0 left-0 h-1 bg-red-500"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${skill.level}%` }}
-                  transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
-                />
-
-                <motion.div
-                  className="w-16 h-16 rounded-full bg-gray-900 p-3 mb-4 flex items-center justify-center"
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 1, ease: "easeInOut" }}
+        {/* Skills Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredSkills.map((skill) => (
+            <div
+              key={skill.name}
+              className="group bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-xl transition-all duration-300"
+            >
+              <div className="flex items-center mb-4">
+                <div
+                  className={`text-3xl ${skill.color} group-hover:scale-110 transition-transform duration-300 p-3 rounded-xl ${skill.bgColor}`}
                 >
-                  <img
-                    src={skill.image}
-                    alt={`${skill.name} Icon`}
-                    className="w-full h-full object-contain"
+                  {skill.icon}
+                </div>
+                <div className="ml-4 flex-1">
+                  <h3 className="font-semibold text-slate-900 text-lg">
+                    {skill.name}
+                  </h3>
+                  <p className="text-sm text-slate-500">{skill.category}</p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm text-slate-600 mb-2">
+                  <span>Proficiency</span>
+                  <span className="font-semibold text-blue-600">
+                    {skill.level}
+                  </span>
+                </div>
+                <div className="w-full bg-slate-200 rounded-full h-2">
+                  <div
+                    className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-1000 ease-out"
+                    style={{ width: skill.level }}
                   />
-                </motion.div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
 
-                <motion.h3
-                  className="text-xl font-bold mb-2 text-red-400"
-                  animate={{
-                    color:
-                      isHovering === index
-                        ? ["#f87171", "#60a5fa", "#f87171"]
-                        : "#f87171",
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: isHovering === index ? Infinity : 0,
-                  }}
-                >
-                  {skill.name}
-                </motion.h3>
-
-                <motion.span
-                  className="px-3 py-1 bg-gray-900 rounded-full text-xs text-gray-300 mb-3"
-                  whileHover={{ scale: 1.1, backgroundColor: "#374151" }}
-                >
-                  {skill.category}
-                </motion.span>
-
-                <motion.p
-                  className="text-sm text-gray-300 text-center"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8 }}
-                >
-                  {skill.description}
-                </motion.p>
-
-                <motion.div className="w-full mt-4 bg-gray-900 h-2 rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-red-500 to-orange-400"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${skill.level}%` }}
-                    transition={{ delay: 1, duration: 1.5, ease: "easeOut" }}
-                  />
-                </motion.div>
-                <motion.span className="text-xs text-gray-400 mt-1">
-                  Proficiency: {skill.level}%
-                </motion.span>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-
-        {/* Floating animated balls in background */}
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-gradient-to-r from-red-500/20 to-orange-500/20 blur-xl"
-            style={{
-              width: Math.random() * 200 + 50,
-              height: Math.random() * 200 + 50,
-            }}
-            animate={{
-              x: [
-                Math.random() * 1000 - 500,
-                Math.random() * 1000 - 500,
-                Math.random() * 1000 - 500,
-              ],
-              y: [
-                Math.random() * 1000 - 500,
-                Math.random() * 1000 - 500,
-                Math.random() * 1000 - 500,
-              ],
-              scale: [0.8, 1.2, 0.8],
-              opacity: [0.4, 0.7, 0.4],
-            }}
-            transition={{
-              duration: 15 + i * 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
+        {/* Professional Summary */}
+        <div className="mt-16 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+          <h3 className="text-2xl font-bold text-slate-900 mb-8 text-center">
+            Professional Focus
+          </h3>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">⚡</span>
+              </div>
+              <h4 className="font-semibold text-slate-900 mb-2">
+                Full Stack Development
+              </h4>
+              <p className="text-slate-600 text-sm">
+                MERN Stack specialization with modern practices
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🎯</span>
+              </div>
+              <h4 className="font-semibold text-slate-900 mb-2">
+                Problem Solving
+              </h4>
+              <p className="text-slate-600 text-sm">
+                Creating scalable solutions for complex challenges
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🚀</span>
+              </div>
+              <h4 className="font-semibold text-slate-900 mb-2">Innovation</h4>
+              <p className="text-slate-600 text-sm">
+                Always exploring new technologies and methodologies
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

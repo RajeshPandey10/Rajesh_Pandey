@@ -18,3 +18,5 @@ const ProtectedRoute = ({ children }) => {
 };
 
 export default ProtectedRoute;
+
+// (Removed all admin panel references. This file is now deprecated and not used in the new minimal portfolio.)

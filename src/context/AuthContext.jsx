@@ -44,4 +44,5 @@ export const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
+// (Removed all admin panel references. This file is now deprecated and not used in the new minimal portfolio.)
 export default AuthContext;

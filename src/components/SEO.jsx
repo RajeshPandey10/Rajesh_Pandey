@@ -344,7 +344,6 @@ const SEO = ({
 
       {/* Verification */}
       <meta name="google-site-verification" content="googlec0e6b63fcec91321" />
-      <meta name="google-adsense-account" content="ca-pub-8181018973115872" />
 
       {/* Structured Data */}
       <script type="application/ld+json">

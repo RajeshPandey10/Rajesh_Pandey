@@ -1,67 +1,49 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 // Enhanced sitemap generator for better SEO
 const generateSitemap = () => {
-  const baseUrl = 'https://rajeshpandey10.com.np';
+  const baseUrl = "https://rajeshpandey10.com.np";
   const currentDate = new Date().toISOString();
 
   // Define all pages with their priorities and update frequencies
   const pages = [
     {
-      url: '/',
-      changefreq: 'daily',
-      priority: '1.0',
-      lastmod: currentDate
+      url: "/",
+      changefreq: "daily",
+      priority: "1.0",
+      lastmod: currentDate,
     },
     {
-      url: '/about',
-      changefreq: 'weekly',
-      priority: '0.9',
-      lastmod: currentDate
+      url: "/about",
+      changefreq: "weekly",
+      priority: "0.9",
+      lastmod: currentDate,
     },
     {
-      url: '/portfolio',
-      changefreq: 'weekly',
-      priority: '0.9',
-      lastmod: currentDate
+      url: "/portfolio",
+      changefreq: "weekly",
+      priority: "0.9",
+      lastmod: currentDate,
     },
     {
-      url: '/contact',
-      changefreq: 'monthly',
-      priority: '0.8',
-      lastmod: currentDate
+      url: "/contact",
+      changefreq: "monthly",
+      priority: "0.8",
+      lastmod: currentDate,
     },
     {
-      url: '/services',
-      changefreq: 'weekly',
-      priority: '0.9',
-      lastmod: currentDate
+      url: "/services",
+      changefreq: "weekly",
+      priority: "0.9",
+      lastmod: currentDate,
     },
     {
-      url: '/rajesh-pandey',
-      changefreq: 'monthly',
-      priority: '0.8',
-      lastmod: currentDate
+      url: "/rajesh-pandey",
+      changefreq: "monthly",
+      priority: "0.8",
+      lastmod: currentDate,
     },
-    {
-      url: '/premium-content',
-      changefreq: 'weekly',
-      priority: '0.7',
-      lastmod: currentDate
-    },
-    {
-      url: '/newsletter',
-      changefreq: 'weekly',
-      priority: '0.6',
-      lastmod: currentDate
-    },
-    {
-      url: '/affiliate-recommendations',
-      changefreq: 'weekly',
-      priority: '0.5',
-      lastmod: currentDate
-    }
   ];
 
   // Generate XML sitemap
@@ -71,7 +53,7 @@ const generateSitemap = () => {
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 `;
 
-  pages.forEach(page => {
+  pages.forEach((page) => {
     sitemap += `  <url>
     <loc>${baseUrl}${page.url}</loc>
     <lastmod>${page.lastmod}</lastmod>
@@ -79,7 +61,7 @@ const generateSitemap = () => {
     <priority>${page.priority}</priority>`;
 
     // Add images for main pages
-    if (page.url === '/') {
+    if (page.url === "/") {
       sitemap += `
     <image:image>
       <image:loc>${baseUrl}/assets/mymainphoto.png</image:loc>
@@ -105,8 +87,8 @@ const generateSitemap = () => {
 
 // Generate robots.txt
 const generateRobotsTxt = () => {
-  const baseUrl = 'https://rajeshpandey10.com.np';
-  
+  const baseUrl = "https://rajeshpandey10.com.np";
+
   return `# Robots.txt for Rajesh Pandey Portfolio
 # Enhanced for better SEO crawling
 
@@ -181,103 +163,94 @@ Revisit-after: 7 days`;
 
 // Generate structured data for different page types
 const generateStructuredData = (pageType) => {
-  const baseUrl = 'https://rajeshpandey10.com.np';
-  
+  const baseUrl = "https://rajeshpandey10.com.np";
+
   const commonPerson = {
     "@type": "Person",
-    "name": "Rajesh Pandey",
-    "url": baseUrl,
-    "image": `${baseUrl}/assets/mymainphoto.png`,
-    "jobTitle": "Full Stack Web Developer",
-    "worksFor": {
+    name: "Rajesh Pandey",
+    url: baseUrl,
+    image: `${baseUrl}/assets/mymainphoto.png`,
+    jobTitle: "Full Stack Web Developer",
+    worksFor: {
       "@type": "Organization",
-      "name": "Freelance"
+      name: "Freelance",
     },
-    "address": {
+    address: {
       "@type": "PostalAddress",
-      "addressLocality": "Kathmandu",
-      "addressCountry": "Nepal"
+      addressLocality: "Kathmandu",
+      addressCountry: "Nepal",
     },
-    "email": "imrajesh2005@gmail.com",
-    "sameAs": [
+    email: "imrajesh2005@gmail.com",
+    sameAs: [
       "https://github.com/rajeshpandey10",
       "https://linkedin.com/in/rajeshpandey10",
       "https://facebook.com/rajeshpandey10",
-      "https://instagram.com/rajeshpandey10"
-    ]
+      "https://instagram.com/rajeshpandey10",
+    ],
   };
 
   switch (pageType) {
-    case 'homepage':
+    case "homepage":
       return {
         "@context": "https://schema.org",
         "@graph": [
           {
             ...commonPerson,
-            "description": "Rajesh Pandey is a Full Stack Web Developer from Nepal specializing in MERN Stack development with 3+ years of experience.",
-            "knowsAbout": [
-              "React.js", "Node.js", "MongoDB", "Express.js", "JavaScript", 
-              "Full Stack Development", "Web Development", "MERN Stack"
-            ]
+            description:
+              "Rajesh Pandey is a Full Stack Web Developer from Nepal specializing in MERN Stack development with 3+ years of experience.",
+            knowsAbout: [
+              "React.js",
+              "Node.js",
+              "MongoDB",
+              "Express.js",
+              "JavaScript",
+              "Full Stack Development",
+              "Web Development",
+              "MERN Stack",
+            ],
           },
           {
             "@type": "WebSite",
-            "name": "Rajesh Pandey Portfolio",
-            "url": baseUrl,
-            "potentialAction": {
+            name: "Rajesh Pandey Portfolio",
+            url: baseUrl,
+            potentialAction: {
               "@type": "SearchAction",
-              "target": `${baseUrl}/search?q={search_term_string}`,
-              "query-input": "required name=search_term_string"
-            }
-          }
-        ]
+              target: `${baseUrl}/search?q={search_term_string}`,
+              "query-input": "required name=search_term_string",
+            },
+          },
+        ],
       };
 
-    case 'services':
+    case "services":
       return {
         "@context": "https://schema.org",
         "@type": "Service",
-        "name": "Full Stack Web Development Services",
-        "provider": commonPerson,
-        "description": "Professional web development services including MERN stack development, React.js applications, and custom web solutions.",
-        "serviceType": "Web Development",
-        "areaServed": {
+        name: "Full Stack Web Development Services",
+        provider: commonPerson,
+        description:
+          "Professional web development services including MERN stack development, React.js applications, and custom web solutions.",
+        serviceType: "Web Development",
+        areaServed: {
           "@type": "Country",
-          "name": "Nepal"
+          name: "Nepal",
         },
-        "offers": [
+        offers: [
           {
             "@type": "Offer",
-            "name": "Full Stack Development",
-            "description": "Complete MERN stack applications",
-            "price": "500-2000",
-            "priceCurrency": "USD"
+            name: "Full Stack Development",
+            description: "Complete MERN stack applications",
+            price: "500-2000",
+            priceCurrency: "USD",
           },
           {
-            "@type": "Offer", 
-            "name": "React.js Development",
-            "description": "Modern React applications",
-            "price": "300-800",
-            "priceCurrency": "USD"
-          }
-        ]
-      };
-
-    case 'premium':
-      return {
-        "@context": "https://schema.org",
-        "@type": "EducationalOrganization",
-        "name": "Rajesh Pandey Premium Content",
-        "description": "Exclusive web development tutorials and mentorship",
-        "url": `${baseUrl}/premium-content`,
-        "founder": commonPerson,
-        "offers": {
-          "@type": "Offer",
-          "name": "Premium Content Subscription",
-          "price": "29",
-          "priceCurrency": "USD",
-          "description": "Monthly access to exclusive tutorials and code reviews"
-        }
+            "@type": "Offer",
+            name: "React.js Development",
+            description: "Modern React applications",
+            price: "300-800",
+            priceCurrency: "USD",
+          },
+        ],
       };
 
     default:

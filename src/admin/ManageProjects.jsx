@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { fetchProjects, addProject, deleteProject, updateProject } from "../services/api";
+import {
+  fetchProjects,
+  addProject,
+  deleteProject,
+  updateProject,
+} from "../services/api";
 import { getImageUrl } from "../utils/imageUtils";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,8 +14,11 @@ const ManageProjects = () => {
   const [newProject, setNewProject] = useState({
     title: "",
     description: "",
+    category: "web",
+    technologies: "",
     demoLink: "",
     githubLink: "",
+    featured: false,
   });
   const [image, setImage] = useState(null);
   const [editingProject, setEditingProject] = useState(null); // Track the project being edited
@@ -32,18 +40,29 @@ const ManageProjects = () => {
     try {
       const token = localStorage.getItem("adminToken");
 
+      // Prepare project data
+      const projectData = {
+        ...newProject,
+        technologies: newProject.technologies, // Keep as string, will be parsed in API
+        image,
+      };
+
       if (editingProject) {
         // Update existing project
-        const updatedProject = { ...newProject, image };
-        const data = await updateProject(editingProject._id, updatedProject, token);
+        const data = await updateProject(
+          editingProject._id,
+          projectData,
+          token
+        );
         setProjects(
-          projects.map((proj) => (proj._id === editingProject._id ? data : proj))
+          projects.map((proj) =>
+            proj._id === editingProject._id ? data : proj
+          )
         );
         toast.success("Project updated successfully!");
       } else {
         // Add new project
-        const project = { ...newProject, image };
-        const data = await addProject(project, token);
+        const data = await addProject(projectData, token);
         setProjects([...projects, data]);
         toast.success("Project added successfully!");
       }
@@ -52,8 +71,11 @@ const ManageProjects = () => {
       setNewProject({
         title: "",
         description: "",
+        category: "web",
+        technologies: "",
         demoLink: "",
         githubLink: "",
+        featured: false,
       });
       setImage(null);
       setEditingProject(null);
@@ -68,8 +90,11 @@ const ManageProjects = () => {
     setNewProject({
       title: project.title,
       description: project.description,
+      category: project.category || "web",
+      technologies: project.technologies ? project.technologies.join(", ") : "",
       demoLink: project.demoLink,
       githubLink: project.githubLink,
+      featured: project.featured || false,
     });
     setImage(null); // Reset image input (optional)
   };
@@ -105,12 +130,32 @@ const ManageProjects = () => {
             }
             className="w-full p-3 border border-gray-700 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <input
-            type="text"
+          <textarea
             placeholder="Description"
             value={newProject.description}
             onChange={(e) =>
               setNewProject({ ...newProject, description: e.target.value })
+            }
+            className="w-full p-3 border border-gray-700 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 resize-none"
+          />
+          <select
+            value={newProject.category}
+            onChange={(e) =>
+              setNewProject({ ...newProject, category: e.target.value })
+            }
+            className="w-full p-3 border border-gray-700 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="web">Web Application</option>
+            <option value="mobile">Mobile Application</option>
+            <option value="design">Design Project</option>
+            <option value="ai-ml">AI/ML Project</option>
+          </select>
+          <input
+            type="text"
+            placeholder="Technologies (e.g., React, Node.js, MongoDB)"
+            value={newProject.technologies}
+            onChange={(e) =>
+              setNewProject({ ...newProject, technologies: e.target.value })
             }
             className="w-full p-3 border border-gray-700 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -134,9 +179,21 @@ const ManageProjects = () => {
           />
           <input
             type="file"
+            accept="image/*"
             onChange={(e) => setImage(e.target.files[0])}
             className="w-full p-3 border border-gray-700 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          <label className="flex items-center gap-2 text-white">
+            <input
+              type="checkbox"
+              checked={newProject.featured}
+              onChange={(e) =>
+                setNewProject({ ...newProject, featured: e.target.checked })
+              }
+              className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+            />
+            Featured Project
+          </label>
         </div>
         <button
           onClick={handleAddOrUpdateProject}
@@ -160,27 +217,57 @@ const ManageProjects = () => {
                 alt={project.title}
                 className="w-full h-48 object-cover rounded-md mb-4"
               />
-              <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-              <p className="text-sm text-gray-400 mb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="text-xl font-bold">{project.title}</h3>
+                {project.featured && (
+                  <span className="bg-yellow-500 text-black text-xs px-2 py-1 rounded">
+                    Featured
+                  </span>
+                )}
+              </div>
+              <div className="mb-2">
+                <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">
+                  {project.category || "web"}
+                </span>
+              </div>
+              {project.technologies && project.technologies.length > 0 && (
+                <div className="mb-3">
+                  <div className="flex flex-wrap gap-1">
+                    {project.technologies.map((tech, index) => (
+                      <span
+                        key={index}
+                        className="bg-gray-600 text-white text-xs px-2 py-1 rounded"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <p className="text-sm text-gray-400 mb-4 line-clamp-3">
                 {project.description}
               </p>
-              <div className="flex justify-between items-center">
-                <a
-                  href={project.demoLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  Demo
-                </a>
-                <a
-                  href={project.githubLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  GitHub
-                </a>
+              <div className="flex justify-between items-center mb-4">
+                {project.demoLink && (
+                  <a
+                    href={project.demoLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline text-sm"
+                  >
+                    🔗 Demo
+                  </a>
+                )}
+                {project.githubLink && (
+                  <a
+                    href={project.githubLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline text-sm"
+                  >
+                    📁 GitHub
+                  </a>
+                )}
               </div>
               <div className="flex justify-between mt-4">
                 <button
