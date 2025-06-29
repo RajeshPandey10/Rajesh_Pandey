@@ -1,6 +1,10 @@
 import React from "react";
 
 const Footer = () => {
+  const handleClick = () => {
+    // Handle button click
+    window.location.href = "mailto:imrajesh2005@gmail.com";
+  };
   return (
     <footer className="bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 text-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,7 +24,7 @@ const Footer = () => {
 
           {/* Right Side - Contact CTA */}
           <div className="text-center md:text-right">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg transition-colors duration-200">
+            <button onClick={handleClick} className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg transition-colors duration-200">
               Contact Me
             </button>
           </div>

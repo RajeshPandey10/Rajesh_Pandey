@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Loader from "./components/Loader";
 import Footer from "./components/Footer";
+import AdminDashboard from "./admin/AdminDashboard";
 
 const Home = lazy(() => import("./components/Home"));
 const Skills = lazy(() => import("./components/Skill"));
@@ -37,6 +38,9 @@ const App = () => {
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/experience" element={<Experience />} />
             <Route path="/contact" element={<Contact />} />
+
+            {/* Admin Routes */}
+            <Route path="/admin/*" element={<AdminDashboard />} />
           </Routes>
         </Suspense>
         <Footer />

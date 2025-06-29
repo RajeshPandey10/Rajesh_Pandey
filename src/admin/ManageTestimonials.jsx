@@ -51,11 +51,17 @@ const ManageTestimonials = () => {
     try {
       setLoading(true);
       const data = await fetchAllTestimonials(adminToken);
-      setTestimonials(data);
+      // Ensure data is always an array
+      const testimonialsArray = Array.isArray(data)
+        ? data
+        : data?.items || data?.data || [];
+      setTestimonials(testimonialsArray);
       toast.success("Testimonials loaded successfully");
     } catch (error) {
       console.error("Error loading testimonials:", error);
       toast.error("Failed to load testimonials");
+      // Set empty array on error
+      setTestimonials([]);
     } finally {
       setLoading(false);
     }
@@ -63,11 +69,16 @@ const ManageTestimonials = () => {
 
   const handleStatusChange = async (id, status) => {
     try {
-      await updateTestimonialStatus(id, status, adminToken);
-      setTestimonials(
-        testimonials.map((testimonial) =>
-          testimonial._id === id ? { ...testimonial, status } : testimonial
-        )
+      const response = await updateTestimonialStatus(id, status, adminToken);
+      // The API returns { message, testimonial }
+      const updatedTestimonial = response.testimonial || response;
+
+      setTestimonials((prevTestimonials) =>
+        Array.isArray(prevTestimonials)
+          ? prevTestimonials.map((testimonial) =>
+              testimonial._id === id ? updatedTestimonial : testimonial
+            )
+          : [updatedTestimonial]
       );
       toast.success(
         `Testimonial ${
@@ -84,7 +95,11 @@ const ManageTestimonials = () => {
     if (window.confirm("Are you sure you want to delete this testimonial?")) {
       try {
         await deleteTestimonial(id, adminToken);
-        setTestimonials(testimonials.filter((t) => t._id !== id));
+        setTestimonials((prevTestimonials) =>
+          Array.isArray(prevTestimonials)
+            ? prevTestimonials.filter((t) => t._id !== id)
+            : []
+        );
         toast.success("Testimonial deleted successfully");
       } catch (error) {
         console.error("Error deleting testimonial:", error);
@@ -123,27 +138,28 @@ const ManageTestimonials = () => {
 
     try {
       if (editingTestimonial) {
-        await updateTestimonial(editingTestimonial._id, formData, adminToken);
-        setTestimonials(
-          testimonials.map((t) =>
-            t._id === editingTestimonial._id
-              ? {
-                  ...t,
-                  name: formData.name,
-                  email: formData.email,
-                  role: formData.role,
-                  message: formData.message,
-                  rating: formData.rating,
-                }
-              : t
-          )
+        const response = await updateTestimonial(
+          editingTestimonial._id,
+          formData,
+          adminToken
+        );
+        // The API returns { message, testimonial }
+        const updatedTestimonial = response.testimonial || response;
+
+        setTestimonials((prevTestimonials) =>
+          Array.isArray(prevTestimonials)
+            ? prevTestimonials.map((t) =>
+                t._id === editingTestimonial._id ? updatedTestimonial : t
+              )
+            : [updatedTestimonial]
         );
         toast.success("Testimonial updated successfully");
         setEditingTestimonial(null);
       } else if (isAddingNew) {
         const newData = { ...formData, status: "approved" };
         const response = await submitTestimonial(newData);
-        loadTestimonials();
+        // Reload testimonials to get fresh data from server
+        await loadTestimonials();
         toast.success("New testimonial added successfully");
         setIsAddingNew(false);
       }
@@ -161,15 +177,24 @@ const ManageTestimonials = () => {
   };
 
   const filteredTestimonials = testimonials.filter((testimonial) => {
+    // Ensure testimonial exists and has required properties
+    if (!testimonial || !testimonial.name) {
+      return false;
+    }
+
     const statusMatch =
       activeFilter === "all" || testimonial.status === activeFilter;
 
     const searchMatch =
       searchTerm === "" ||
-      testimonial.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      testimonial.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      testimonial.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      testimonial.role.toLowerCase().includes(searchTerm.toLowerCase());
+      (testimonial.name &&
+        testimonial.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (testimonial.email &&
+        testimonial.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (testimonial.message &&
+        testimonial.message.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (testimonial.role &&
+        testimonial.role.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return statusMatch && searchMatch;
   });
@@ -549,35 +574,39 @@ const ManageTestimonials = () => {
                             />
                           ) : (
                             <div className="h-14 w-14 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-xl font-bold text-white">
-                              {testimonial.name.charAt(0)}
+                              {testimonial.name && testimonial.name.charAt
+                                ? testimonial.name.charAt(0).toUpperCase()
+                                : "?"}
                             </div>
                           )}
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold text-white">
-                            {testimonial.name}
+                            {testimonial.name || "Unknown"}
                           </h3>
                           <p className="text-sm text-gray-400">
-                            {testimonial.email}
+                            {testimonial.email || "No email"}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {testimonial.role}
+                            {testimonial.role || "No role specified"}
                           </p>
                           <div className="flex mt-1">
-                            {renderStars(testimonial.rating)}
+                            {renderStars(testimonial.rating || 0)}
                           </div>
                         </div>
                       </div>
 
                       <div className="relative mb-4">
                         <p className="text-gray-300 italic">
-                          "{testimonial.message}"
+                          "{testimonial.message || "No message"}"
                         </p>
                       </div>
 
                       <div className="text-xs text-gray-500 mb-3">
                         Submitted:{" "}
-                        {new Date(testimonial.createdAt).toLocaleDateString()}
+                        {testimonial.createdAt
+                          ? new Date(testimonial.createdAt).toLocaleDateString()
+                          : "Unknown date"}
                       </div>
 
                       <div className="flex justify-between items-center">

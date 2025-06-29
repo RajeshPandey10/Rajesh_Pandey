@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { X, Lock, Mail, Shield } from "lucide-react";
 import { toast } from "react-toastify";
 
-const API_BASE_URL = "http://localhost:4000/api";
+const API_BASE_URL =import.meta.env.VITE_API_BASE_URL;
 
 const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
   const [step, setStep] = useState(1); // 1: credentials, 2: OTP
@@ -19,19 +19,16 @@ const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/admin/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: formData.username,
-            password: formData.password,
-          }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/admin/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password,
+        }),
+      });
 
       const data = await response.json();
 
@@ -54,19 +51,16 @@ const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/admin/verify-otp`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            adminId,
-            otp: formData.otp,
-          }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/admin/verify-otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          adminId,
+          otp: formData.otp,
+        }),
+      });
 
       const data = await response.json();
 

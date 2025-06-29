@@ -25,9 +25,8 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Here you would typically send the data to your backend
-      // For now, we'll simulate a successful submission
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Send the data to your backend
+      await submitContact(formData);
 
       toast.success("Message sent successfully! I'll get back to you soon.", {
         position: "top-right",
@@ -46,6 +45,7 @@ const Contact = () => {
         message: "",
       });
     } catch (error) {
+      console.error("Contact form submission error:", error);
       toast.error("Failed to send message. Please try again.", {
         position: "top-right",
         autoClose: 5000,
@@ -62,7 +62,7 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="py-24 bg-gradient-to-br from-blue-50 to-indigo-50"
+      className="py-10 bg-gradient-to-br from-blue-50 to-indigo-50"
     >
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
@@ -95,23 +95,31 @@ const Contact = () => {
             </div>
 
             <div className="space-y-6">
-              <div className="flex items-center gap-4 p-4 bg-white rounded-xl border border-slate-200">
+              <div className="flex items-center gap-4 p-4 bg-white rounded-xl border border-slate-200 hover:shadow-md transition-shadow cursor-pointer">
                 <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Mail className="w-6 h-6 text-blue-600" />
                 </div>
-                <div>
+                <div
+                  onClick={() =>
+                    window.open("mailto:imrajesh2005@gmail.com", "_blank")
+                  }
+                >
                   <h4 className="font-semibold text-slate-900">Email</h4>
-                  <p className="text-slate-600">rajeshpandey10111@gmail.com</p>
+                  <p className="text-slate-600 hover:text-blue-600 transition-colors">
+                    imrajesh2005@gmail.com
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 p-4 bg-white rounded-xl border border-slate-200">
+              <div className="flex items-center gap-4 p-4 bg-white rounded-xl border border-slate-200 hover:shadow-md transition-shadow cursor-pointer">
                 <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Phone className="w-6 h-6 text-green-600" />
                 </div>
-                <div>
+                <div onClick={() => window.open("tel:+9779841208969", "_self")}>
                   <h4 className="font-semibold text-slate-900">Phone</h4>
-                  <p className="text-slate-600">+977 9864949090</p>
+                  <p className="text-slate-600 hover:text-green-600 transition-colors">
+                    +977 9841208969
+                  </p>
                 </div>
               </div>
 

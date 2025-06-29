@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:4000/api";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api";
 
 export const fetchProjects = async (
   page = 1,
@@ -136,8 +137,16 @@ export const addGalleryItem = async (galleryData, token) => {
   formData.append("title", galleryData.title);
   formData.append("description", galleryData.description);
   formData.append("category", galleryData.category);
-  if (galleryData.image) {
-    formData.append("image", galleryData.image);
+
+  // Handle multiple images
+  if (galleryData.images && galleryData.images.length > 0) {
+    galleryData.images.forEach((image) => {
+      formData.append("images", image);
+    });
+  }
+  // Fallback for single image (backward compatibility)
+  else if (galleryData.image) {
+    formData.append("images", galleryData.image);
   }
 
   const response = await axios.post(`${API_BASE_URL}/gallery`, formData, {
@@ -154,8 +163,16 @@ export const updateGalleryItem = async (id, galleryData, token) => {
   formData.append("title", galleryData.title);
   formData.append("description", galleryData.description);
   formData.append("category", galleryData.category);
-  if (galleryData.image) {
-    formData.append("image", galleryData.image);
+
+  // Handle multiple images
+  if (galleryData.images && galleryData.images.length > 0) {
+    galleryData.images.forEach((image) => {
+      formData.append("images", image);
+    });
+  }
+  // Fallback for single image (backward compatibility)
+  else if (galleryData.image) {
+    formData.append("images", galleryData.image);
   }
 
   const response = await axios.put(`${API_BASE_URL}/gallery/${id}`, formData, {
@@ -170,6 +187,137 @@ export const updateGalleryItem = async (id, galleryData, token) => {
 export const deleteGalleryItem = async (id, token) => {
   const response = await axios.delete(`${API_BASE_URL}/gallery/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+// Testimonial Admin API functions
+export const fetchAllTestimonials = async (token) => {
+  const response = await axios.get(`${API_BASE_URL}/testimonials/admin`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+export const submitTestimonial = async (testimonialData, token) => {
+  const formData = new FormData();
+  formData.append("name", testimonialData.name);
+  formData.append("email", testimonialData.email || "");
+  formData.append("message", testimonialData.message || testimonialData.review);
+  formData.append(
+    "role",
+    testimonialData.role || testimonialData.position || ""
+  );
+  formData.append("rating", testimonialData.rating);
+  if (testimonialData.photo) {
+    formData.append("photo", testimonialData.photo);
+  }
+
+  const response = await axios.post(`${API_BASE_URL}/testimonials`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const updateTestimonial = async (id, testimonialData, token) => {
+  const formData = new FormData();
+  formData.append("name", testimonialData.name);
+  formData.append("email", testimonialData.email || "");
+  formData.append("message", testimonialData.message || testimonialData.review);
+  formData.append(
+    "role",
+    testimonialData.role || testimonialData.position || ""
+  );
+  formData.append("rating", testimonialData.rating);
+  formData.append("status", testimonialData.status || "pending");
+  if (testimonialData.photo) {
+    formData.append("photo", testimonialData.photo);
+  }
+
+  const response = await axios.put(
+    `${API_BASE_URL}/testimonials/${id}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const updateTestimonialStatus = async (id, status, token) => {
+  const response = await axios.put(
+    `${API_BASE_URL}/testimonials/${id}/status`,
+    { status },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  return response.data;
+};
+
+export const deleteTestimonial = async (id, token) => {
+  const response = await axios.delete(`${API_BASE_URL}/testimonials/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+// Contacts Admin API functions
+export const fetchContacts = async (token) => {
+  const response = await axios.get(`${API_BASE_URL}/contacts`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+export const markContactAsReplied = async (id, token) => {
+  const response = await axios.patch(
+    `${API_BASE_URL}/contacts/${id}/replied`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  return response.data;
+};
+
+export const replyToContact = async (id, replyMessage, token) => {
+  const response = await axios.post(
+    `${API_BASE_URL}/contacts/${id}/reply`,
+    { replyMessage },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  return response.data;
+};
+
+export const deleteContact = async (id, token) => {
+  const response = await axios.delete(`${API_BASE_URL}/contacts/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+// Admin login API functions
+export const loginAdmin = async (email, password) => {
+  const response = await axios.post(`${API_BASE_URL}/admin/login`, {
+    email,
+    password,
+  });
+  return response.data;
+};
+
+export const verifyAdminOTP = async (email, otp) => {
+  const response = await axios.post(`${API_BASE_URL}/admin/verify-otp`, {
+    email,
+    otp,
   });
   return response.data;
 };

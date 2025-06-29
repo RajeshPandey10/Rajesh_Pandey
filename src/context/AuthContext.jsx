@@ -12,30 +12,45 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [adminToken, setAdminToken] = useState(null);
+  const [adminData, setAdminData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Check if user is already authenticated
     const token = localStorage.getItem("adminToken");
+    const userData = localStorage.getItem("adminData");
+
     if (token) {
-      // Verify token validity here if needed
+      setAdminToken(token);
       setIsAuthenticated(true);
+      if (userData) {
+        setAdminData(JSON.parse(userData));
+      }
     }
     setLoading(false);
   }, []);
 
-  const login = (token) => {
+  const login = (token, userData) => {
     localStorage.setItem("adminToken", token);
+    localStorage.setItem("adminData", JSON.stringify(userData));
+    setAdminToken(token);
+    setAdminData(userData);
     setIsAuthenticated(true);
   };
 
   const logout = () => {
     localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminData");
+    setAdminToken(null);
+    setAdminData(null);
     setIsAuthenticated(false);
   };
 
   const value = {
     isAuthenticated,
+    adminToken,
+    adminData,
     login,
     logout,
     loading,

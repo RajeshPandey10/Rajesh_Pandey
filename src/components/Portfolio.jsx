@@ -46,6 +46,11 @@ const Portfolio = () => {
       setCurrentPage(page);
     } catch (error) {
       console.error("Error loading projects:", error);
+      // Ensure projects is always an array, even on error
+      if (reset || page === 1) {
+        setProjects([]);
+      }
+      setPagination(null);
     } finally {
       setIsLoading(false);
       setLoadingMore(false);
@@ -78,7 +83,7 @@ const Portfolio = () => {
   return (
     <section
       id="portfolio"
-      className="py-24 bg-gradient-to-br from-slate-50 to-blue-50"
+      className="py-10 bg-gradient-to-br from-slate-50 to-blue-50"
     >
       <div className="max-w-7xl mx-auto px-6">
         {/* Header Section */}
@@ -97,21 +102,24 @@ const Portfolio = () => {
         </div>
 
         {/* Filter Controls */}
-        <div className="flex flex-col sm:flex-row items-center justify-between mb-12 gap-6">
-          <div className="flex items-center gap-2 p-1 bg-white rounded-xl border border-slate-200 shadow-sm">
+        <div className="flex flex-col xl:flex-row items-center justify-between mb-12 gap-6">
+          <div className="flex flex-wrap justify-center items-center gap-2 p-1 bg-white rounded-xl border border-slate-200 shadow-sm w-full xl:w-auto">
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => handleFilterChange(category.id)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition-all duration-200 ${
                   filter === category.id
                     ? "bg-blue-600 text-white shadow-md"
                     : "text-slate-600 hover:bg-slate-50"
                 }`}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 md:gap-2">
                   {category.icon}
-                  {category.name}
+                  <span className="hidden sm:inline">{category.name}</span>
+                  <span className="sm:hidden">
+                    {category.name.split(" ")[0]}
+                  </span>
                 </div>
               </button>
             ))}
@@ -125,6 +133,7 @@ const Portfolio = () => {
                   ? "bg-blue-600 text-white"
                   : "text-slate-600 hover:bg-slate-50"
               }`}
+              title="Grid View"
             >
               <Grid3X3 className="w-4 h-4" />
             </button>
@@ -135,6 +144,7 @@ const Portfolio = () => {
                   ? "bg-blue-600 text-white"
                   : "text-slate-600 hover:bg-slate-50"
               }`}
+              title="List View"
             >
               <List className="w-4 h-4" />
             </button>
@@ -143,12 +153,12 @@ const Portfolio = () => {
 
         {/* Projects Count */}
         <div className="text-center mb-8">
-          <p className="text-slate-600">
+          <p className="text-slate-600 text-sm md:text-base">
             {pagination ? (
               <>
                 Showing{" "}
                 <span className="font-semibold text-blue-600">
-                  {projects.length}
+                  {projects?.length || 0}
                 </span>{" "}
                 of{" "}
                 <span className="font-semibold text-blue-600">
@@ -160,7 +170,7 @@ const Portfolio = () => {
               <>
                 Showing{" "}
                 <span className="font-semibold text-blue-600">
-                  {projects.length}
+                  {projects?.length || 0}
                 </span>{" "}
                 projects
               </>
@@ -176,23 +186,27 @@ const Portfolio = () => {
           </div>
         ) : (
           <div
-            className={`grid gap-6 ${
+            className={`grid gap-4 md:gap-6 ${
               viewMode === "grid"
-                ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
                 : "grid-cols-1"
             }`}
           >
-            {projects.map((project) => (
+            {projects?.map((project) => (
               <div
                 key={project._id}
                 onClick={() => setSelectedProject(project)}
                 className={`group cursor-pointer bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-blue-300 hover:shadow-xl transition-all duration-300 ${
-                  viewMode === "list" ? "flex items-center" : ""
+                  viewMode === "list"
+                    ? "flex flex-col sm:flex-row items-start"
+                    : ""
                 }`}
               >
                 <div
                   className={`relative overflow-hidden ${
-                    viewMode === "list" ? "w-64 h-40 flex-shrink-0" : "h-48"
+                    viewMode === "list"
+                      ? "w-full sm:w-64 h-48 sm:h-40 flex-shrink-0"
+                      : "h-48"
                   }`}
                 >
                   <img
@@ -203,10 +217,10 @@ const Portfolio = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
 
-                <div className="p-6 flex-1">
+                <div className="p-4 md:p-6 flex-1">
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-2 h-2 bg-blue-600 rounded-full" />
-                    <span className="text-blue-600 text-sm font-medium">
+                    <span className="text-blue-600 text-xs md:text-sm font-medium">
                       {project.featured ? "Featured Project" : "Project"}
                     </span>
                     {project.category && (
@@ -215,7 +229,7 @@ const Portfolio = () => {
                       </span>
                     )}
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
+                  <h3 className="text-lg md:text-xl font-bold mb-3 text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
                     {project.title}
                   </h3>
                   <p className="text-slate-600 text-sm leading-relaxed mb-4 line-clamp-3">
@@ -263,7 +277,7 @@ const Portfolio = () => {
             <button
               onClick={loadMoreProjects}
               disabled={loadingMore}
-              className="inline-flex items-center gap-2 px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              className="inline-flex items-center gap-2 px-6 md:px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 text-sm md:text-base"
             >
               {loadingMore ? (
                 <>
@@ -281,7 +295,7 @@ const Portfolio = () => {
         )}
 
         {/* Empty State */}
-        {!isLoading && projects.length === 0 && (
+        {!isLoading && (!projects || projects.length === 0) && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🚀</div>
             <h3 className="text-2xl font-bold text-slate-900 mb-2">
@@ -305,13 +319,13 @@ const Portfolio = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              className="absolute top-6 right-6 z-10 p-2 bg-white rounded-full text-slate-600 hover:bg-slate-50 transition-colors border border-slate-200"
+              className="absolute top-4 md:top-6 right-4 md:right-6 z-10 p-2 bg-white rounded-full text-slate-600 hover:bg-slate-50 transition-colors border border-slate-200"
               onClick={() => setSelectedProject(null)}
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="relative h-80 overflow-hidden">
+            <div className="relative h-64 md:h-80 overflow-hidden">
               <img
                 src={getImageUrl(selectedProject.image)}
                 alt={selectedProject.title}
@@ -320,9 +334,9 @@ const Portfolio = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-transparent" />
             </div>
 
-            <div className="p-8">
-              <div className="flex items-center gap-3 mb-4">
-                <h3 className="text-3xl font-bold text-slate-900">
+            <div className="p-4 md:p-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
+                <h3 className="text-2xl md:text-3xl font-bold text-slate-900">
                   {selectedProject.title}
                 </h3>
                 {selectedProject.featured && (
@@ -340,7 +354,7 @@ const Portfolio = () => {
                 </div>
               )}
 
-              <p className="text-slate-600 mb-6 leading-relaxed text-lg">
+              <p className="text-slate-600 mb-6 leading-relaxed text-base md:text-lg">
                 {selectedProject.description}
               </p>
 
@@ -364,13 +378,13 @@ const Portfolio = () => {
                   </div>
                 )}
 
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-4">
                 {selectedProject.demoLink && (
                   <a
                     href={selectedProject.demoLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
+                    className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
                   >
                     <ExternalLink className="w-4 h-4" />
                     Live Demo
@@ -381,7 +395,7 @@ const Portfolio = () => {
                     href={selectedProject.githubLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition-colors"
+                    className="flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition-colors"
                   >
                     <Github className="w-4 h-4" />
                     Source Code

@@ -27,10 +27,14 @@ const ManageProjects = () => {
     const loadProjects = async () => {
       try {
         const data = await fetchProjects();
-        setProjects(data);
+        // Handle both direct array response and paginated response
+        const projectsArray = data?.projects || data?.data || data;
+        setProjects(Array.isArray(projectsArray) ? projectsArray : []);
       } catch (error) {
         console.error("Error fetching projects:", error);
         toast.error("Failed to fetch projects.");
+        // Ensure projects is always an array even on error
+        setProjects([]);
       }
     };
     loadProjects();
@@ -54,16 +58,20 @@ const ManageProjects = () => {
           projectData,
           token
         );
-        setProjects(
-          projects.map((proj) =>
-            proj._id === editingProject._id ? data : proj
-          )
+        setProjects((prevProjects) =>
+          Array.isArray(prevProjects)
+            ? prevProjects.map((proj) =>
+                proj._id === editingProject._id ? data : proj
+              )
+            : [data]
         );
         toast.success("Project updated successfully!");
       } else {
         // Add new project
         const data = await addProject(projectData, token);
-        setProjects([...projects, data]);
+        setProjects((prevProjects) =>
+          Array.isArray(prevProjects) ? [...prevProjects, data] : [data]
+        );
         toast.success("Project added successfully!");
       }
 
@@ -103,7 +111,11 @@ const ManageProjects = () => {
     try {
       const token = localStorage.getItem("adminToken");
       await deleteProject(id, token);
-      setProjects(projects.filter((proj) => proj._id !== id));
+      setProjects((prevProjects) =>
+        Array.isArray(prevProjects)
+          ? prevProjects.filter((proj) => proj._id !== id)
+          : []
+      );
       toast.success("Project deleted successfully!");
     } catch (error) {
       console.error("Error deleting project:", error);
@@ -207,7 +219,7 @@ const ManageProjects = () => {
       <div>
         <h4 className="text-2xl font-semibold mb-4">All Projects</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
+          {projects?.map((project) => (
             <div
               key={project._id}
               className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300"

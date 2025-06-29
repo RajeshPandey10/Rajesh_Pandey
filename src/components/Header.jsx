@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import AdminLoginModal from "./AdminLoginModal";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -19,7 +22,10 @@ const Header = () => {
   const handleAdminLogin = (adminData, token) => {
     // Handle successful admin login
     console.log("Admin logged in:", adminData);
-    // You can redirect to admin dashboard here if needed
+    // Update AuthContext
+    login(token, adminData);
+    // Redirect to admin dashboard
+    navigate("/admin");
   };
 
   const handleLogoClick = (e) => {

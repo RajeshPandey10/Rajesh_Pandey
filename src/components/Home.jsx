@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Quote,
   Star,
@@ -8,15 +9,30 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { fetchTestimonials, fetchGallery } from "../services/api";
-import heroPhoto from "../assets/my2photo.jpeg";
+import heroPhoto from "../assets/rajesh-pandeu.png";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [testimonials, setTestimonials] = useState([]);
   const [gallery, setGallery] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentGalleryPage, setCurrentGalleryPage] = useState(0);
   const [loading, setLoading] = useState(true);
+  const IMAGES_PER_PAGE = 8;
 
+  const handleHireMeClick = () => {
+    navigate("/contact");
+  };
+
+  const handleViewResumeClick = () => {
+    // Create a download link for the resume
+    const link = document.createElement("a");
+    link.href = "/assets/RajeshPandey-Resume.pdf"; // Path to your resume in public folder
+    link.download = "RajeshPandey-Resume.pdf";
+    link.click();
+  };
   // Fetch data from backend
   useEffect(() => {
     const loadData = async () => {
@@ -24,53 +40,16 @@ const Home = () => {
         setLoading(true);
         const [testimonialsData, galleryData] = await Promise.all([
           fetchTestimonials(),
-          fetchGallery(1, 8), // Load first 8 gallery items
+          fetchGallery(1, 20), // Load more gallery items
         ]);
 
-        setTestimonials(testimonialsData);
-        setGallery(galleryData.items || galleryData); // Handle paginated response
+        setTestimonials(testimonialsData || []);
+        setGallery(galleryData.items || galleryData || []); // Handle paginated response
       } catch (error) {
         console.error("Error loading data:", error);
-        // Fallback to mock data if API fails
-        setTestimonials([
-          {
-            id: 1,
-            name: "Amit Sharma",
-            role: "Project Manager at TechCorp",
-            photo:
-              "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
-            message:
-              "Rajesh delivered an exceptional web application for our company. His expertise in MERN stack is outstanding!",
-            rating: 5,
-          },
-          {
-            id: 2,
-            name: "Priya Thapa",
-            role: "CEO of Digital Solutions",
-            photo:
-              "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=100&h=100&fit=crop&crop=face",
-            message:
-              "Working with Rajesh was a game-changer for our startup. His full-stack development skills helped us launch our product successfully.",
-            rating: 5,
-          },
-        ]);
-
-        setGallery([
-          {
-            id: 1,
-            title: "Workspace Setup",
-            image:
-              "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=300&fit=crop",
-            category: "workspace",
-          },
-          {
-            id: 2,
-            title: "Team Collaboration",
-            image:
-              "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop",
-            category: "work",
-          },
-        ]);
+        // Set empty arrays as fallback instead of mock data
+        setTestimonials([]);
+        setGallery([]);
       } finally {
         setLoading(false);
       }
@@ -89,6 +68,45 @@ const Home = () => {
     );
   };
 
+  // Gallery pagination functions
+  const nextGalleryPage = () => {
+    const totalPages = Math.ceil(gallery.length / IMAGES_PER_PAGE);
+    setCurrentGalleryPage((prev) => (prev + 1) % totalPages);
+  };
+
+  const prevGalleryPage = () => {
+    const totalPages = Math.ceil(gallery.length / IMAGES_PER_PAGE);
+    setCurrentGalleryPage((prev) => (prev - 1 + totalPages) % totalPages);
+  };
+
+  // Gallery modal navigation
+  const nextImage = () => {
+    if (selectedImage && selectedImage.images) {
+      setCurrentImageIndex((prev) => (prev + 1) % selectedImage.images.length);
+    }
+  };
+
+  const prevImage = () => {
+    if (selectedImage && selectedImage.images) {
+      setCurrentImageIndex(
+        (prev) =>
+          (prev - 1 + selectedImage.images.length) % selectedImage.images.length
+      );
+    }
+  };
+
+  // Get current page gallery items
+  const getCurrentPageGallery = () => {
+    const startIndex = currentGalleryPage * IMAGES_PER_PAGE;
+    return gallery.slice(startIndex, startIndex + IMAGES_PER_PAGE);
+  };
+
+  // Open gallery modal
+  const openGalleryModal = (item) => {
+    setSelectedImage(item);
+    setCurrentImageIndex(0);
+  };
+
   return (
     <div>
       {/* Hero Section - Image and Description */}
@@ -103,6 +121,20 @@ const Home = () => {
                     src={heroPhoto}
                     alt="Rajesh Pandey - Full Stack Web Developer"
                     className="w-full h-full object-cover"
+                    style={{
+                      // Positioning: Choose where to focus the crop
+                      objectPosition: "center top", // Options: 'center', 'top', 'bottom', 'left', 'right', 'center top', 'center bottom', etc.
+
+                      // Zoom/Scale: Adjust the size of the image
+                      transform: "scale(1.1)", // 1.0 = normal, 1.1 = 10% zoom in, 0.9 = 10% zoom out
+
+                      // Fine positioning adjustments
+                      transformOrigin: "center", // Where the scaling happens from
+
+                      // Optional: Slight vertical/horizontal shift
+                      // transform: 'scale(1.1) translateY(-10px)', // Move up 10px
+                      // transform: 'scale(1.1) translateX(5px)',   // Move right 5px
+                    }}
                   />
                 </div>
                 {/* Decorative elements */}
@@ -176,10 +208,16 @@ const Home = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                <button
+                  onClick={handleHireMeClick}
+                  className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                >
                   Hire Me
                 </button>
-                <button className="px-8 py-3 border border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-colors duration-200">
+                <button
+                  onClick={handleViewResumeClick}
+                  className="px-8 py-3 border border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-colors duration-200"
+                >
                   View Resume
                 </button>
               </div>
@@ -214,41 +252,126 @@ const Home = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
                 Work & Life Moments
               </h2>
-              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8">
                 A glimpse into my professional journey and workspace
               </p>
+
+              {/* Gallery Pagination Info */}
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-8">
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={prevGalleryPage}
+                    disabled={gallery.length <= IMAGES_PER_PAGE}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-300"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    Previous
+                  </button>
+
+                  <div className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg font-medium">
+                    Page {currentGalleryPage + 1} of{" "}
+                    {Math.ceil(gallery.length / IMAGES_PER_PAGE)}
+                  </div>
+
+                  <button
+                    onClick={nextGalleryPage}
+                    disabled={gallery.length <= IMAGES_PER_PAGE}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-300"
+                  >
+                    Next
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {gallery.map((item) => (
-                <div
-                  key={item.id}
-                  className="group relative overflow-hidden rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
-                  onClick={() => setSelectedImage(item)}
-                >
-                  <div className="aspect-square overflow-hidden">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-white font-semibold text-lg">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+              {gallery &&
+                gallery.length > 0 &&
+                getCurrentPageGallery().map((item) => (
+                  <div
+                    key={item?.id || `gallery-${Math.random()}`}
+                    className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 flex flex-col h-[520px]"
+                    onClick={() => openGalleryModal(item)}
+                  >
+                    {/* Image Container */}
+                    <div className="relative h-64 overflow-hidden">
+                      <img
+                        src={item.images ? item.images[0] : item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+
+                      {/* Image Count Badge */}
+                      {item.images && item.images.length > 1 && (
+                        <div className="absolute top-3 right-3 px-2 py-1 bg-black/70 backdrop-blur-sm rounded-full text-white text-xs font-medium">
+                          +{item.images.length}
+                        </div>
+                      )}
+
+                      {/* Hover Overlay */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                        <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-75 group-hover:scale-100">
+                          <ExternalLink className="w-5 h-5 text-gray-700" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Content Section - Fixed proportions */}
+                    <div className="p-6 flex-1 flex flex-col">
+                      <h3 className="font-bold text-gray-900 text-xl mb-3 line-clamp-2">
                         {item.title}
                       </h3>
-                      <p className="text-gray-200 text-sm capitalize">
-                        {item.category}
-                      </p>
+
+                      {item.description && (
+                        <div className="flex-1 mb-4">
+                          <div className="h-40 overflow-y-auto pr-2 border border-gray-100 rounded-lg p-3 bg-gray-50">
+                            <p className="text-gray-700 text-sm leading-snug whitespace-pre-line">
+                              {item.description}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-200 mt-auto">
+                        <span className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full capitalize">
+                          {item.category}
+                        </span>
+
+                        {item.images && item.images.length > 1 && (
+                          <span className="text-gray-500 text-xs font-medium">
+                            {item.images.length} photos
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  <div className="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <ExternalLink className="w-4 h-4 text-white" />
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
+
+            {/* Gallery Page Indicators */}
+            {gallery && gallery.length > IMAGES_PER_PAGE && (
+              <div className="flex flex-col items-center gap-4 mt-10">
+                <div className="flex justify-center items-center gap-2">
+                  {Array.from({
+                    length: Math.ceil(gallery.length / IMAGES_PER_PAGE),
+                  }).map((_, index) => (
+                    <button
+                      key={`gallery-page-${index}`}
+                      onClick={() => setCurrentGalleryPage(index)}
+                      className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                        index === currentGalleryPage
+                          ? "bg-blue-600 scale-110"
+                          : "bg-blue-200 hover:bg-blue-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <p className="text-sm text-gray-500">
+                  Click dots to jump to any page • Total: {gallery.length} items
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Testimonials Section */}
@@ -308,17 +431,19 @@ const Home = () => {
                     <ArrowLeft className="w-5 h-5" />
                   </button>
                   <div className="flex gap-2">
-                    {testimonials.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentTestimonial(index)}
-                        className={`w-3 h-3 rounded-full transition-colors ${
-                          index === currentTestimonial
-                            ? "bg-blue-600"
-                            : "bg-blue-200"
-                        }`}
-                      />
-                    ))}
+                    {testimonials &&
+                      testimonials.length > 0 &&
+                      testimonials.map((_, index) => (
+                        <button
+                          key={`testimonial-${index}`}
+                          onClick={() => setCurrentTestimonial(index)}
+                          className={`w-3 h-3 rounded-full transition-colors ${
+                            index === currentTestimonial
+                              ? "bg-blue-600"
+                              : "bg-blue-200"
+                          }`}
+                        />
+                      ))}
                   </div>
                   <button
                     onClick={nextTestimonial}
@@ -337,30 +462,120 @@ const Home = () => {
       {/* Gallery Modal */}
       {selectedImage && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedImage(null)}
         >
-          <div className="relative max-w-4xl max-h-full">
+          <div className="relative max-w-5xl max-h-full w-full">
+            {/* Close Button */}
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute -top-4 -right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors z-10"
+              className="absolute -top-4 -right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors z-20"
             >
               ×
             </button>
-            <img
-              src={selectedImage.image}
-              alt={selectedImage.title}
-              className="max-w-full max-h-[90vh] object-contain rounded-lg"
-              onClick={(e) => e.stopPropagation()}
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+
+            {/* Image Container */}
+            <div className="relative">
+              <img
+                src={
+                  selectedImage.images
+                    ? selectedImage.images[currentImageIndex]
+                    : selectedImage.image
+                }
+                alt={selectedImage.title}
+                className="max-w-full max-h-[80vh] object-contain rounded-lg mx-auto block"
+                onClick={(e) => e.stopPropagation()}
+              />
+
+              {/* Navigation Arrows (only show if multiple images) */}
+              {selectedImage.images && selectedImage.images.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      prevImage();
+                    }}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+                  >
+                    <ArrowLeft className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      nextImage();
+                    }}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+                  >
+                    <ArrowRight className="w-6 h-6" />
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Image Info */}
+            <div className="bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg absolute bottom-0 left-0 right-0">
               <h3 className="text-white text-xl font-semibold mb-2">
                 {selectedImage.title}
               </h3>
-              <p className="text-gray-300 capitalize">
+              <p className="text-gray-300 capitalize mb-2">
                 {selectedImage.category}
               </p>
+              {selectedImage.description && (
+                <p className="text-gray-400 text-sm mb-3">
+                  {selectedImage.description}
+                </p>
+              )}
+              {selectedImage.images && selectedImage.images.length > 1 && (
+                <div className="flex items-center gap-4">
+                  <p className="text-gray-300 text-sm">
+                    {currentImageIndex + 1} of {selectedImage.images.length}
+                  </p>
+                  <div className="flex gap-1">
+                    {selectedImage.images &&
+                      selectedImage.images.map((_, index) => (
+                        <button
+                          key={`modal-dot-${index}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentImageIndex(index);
+                          }}
+                          className={`w-2 h-2 rounded-full transition-colors ${
+                            index === currentImageIndex
+                              ? "bg-white"
+                              : "bg-white/40"
+                          }`}
+                        />
+                      ))}
+                  </div>
+                </div>
+              )}
             </div>
+
+            {/* Thumbnail Navigation (for multiple images) */}
+            {selectedImage.images && selectedImage.images.length > 1 && (
+              <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2 bg-black/50 backdrop-blur-sm rounded-lg p-2 max-w-xs overflow-x-auto">
+                {selectedImage.images.map((img, index) => (
+                  <button
+                    key={`thumbnail-${index}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentImageIndex(index);
+                    }}
+                    className={`flex-shrink-0 w-12 h-12 rounded overflow-hidden border-2 transition-colors ${
+                      index === currentImageIndex
+                        ? "border-white"
+                        : "border-transparent"
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      alt={`${selectedImage.title} ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

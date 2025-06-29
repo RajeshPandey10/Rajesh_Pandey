@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   fetchAllGalleryItems,
   addGalleryItem,
@@ -16,9 +16,11 @@ const ManageGallery = () => {
     description: "",
     category: "web",
   });
-  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]); // Changed to support multiple images
   const [editingItem, setEditingItem] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [imagePreviews, setImagePreviews] = useState([]); // For image previews
+  const fileInputRef = useRef(null); // For resetting file input
 
   useEffect(() => {
     loadGalleryItems();
@@ -29,12 +31,31 @@ const ManageGallery = () => {
       setLoading(true);
       const token = localStorage.getItem("adminToken");
       const data = await fetchAllGalleryItems(token);
-      setGalleryItems(data);
+      // Handle both direct array response and paginated response
+      const itemsArray = data?.items || data?.data || data;
+      setGalleryItems(Array.isArray(itemsArray) ? itemsArray : []);
     } catch (error) {
       console.error("Error fetching gallery items:", error);
       toast.error("Failed to fetch gallery items.");
+      // Ensure galleryItems is always an array even on error
+      setGalleryItems([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    console.log("Selected files:", files); // Debug log
+    setImages(files);
+
+    // Create previews
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setImagePreviews(previews);
+
+    // Show selected files count
+    if (files.length > 0) {
+      toast.info(`Selected ${files.length} image(s)`);
     }
   };
 
@@ -42,24 +63,33 @@ const ManageGallery = () => {
     try {
       const token = localStorage.getItem("adminToken");
 
+      if (images.length === 0 && !editingItem) {
+        toast.error("Please select at least one image.");
+        return;
+      }
+
       const itemData = {
         ...newItem,
-        image,
+        images, // Use images array instead of single image
       };
 
       if (editingItem) {
         // Update existing item
         const data = await updateGalleryItem(editingItem._id, itemData, token);
-        setGalleryItems(
-          galleryItems.map((item) =>
-            item._id === editingItem._id ? data : item
-          )
+        setGalleryItems((prevItems) =>
+          Array.isArray(prevItems)
+            ? prevItems.map((item) =>
+                item._id === editingItem._id ? data : item
+              )
+            : [data]
         );
         toast.success("Gallery item updated successfully!");
       } else {
         // Add new item
         const data = await addGalleryItem(itemData, token);
-        setGalleryItems([...galleryItems, data]);
+        setGalleryItems((prevItems) =>
+          Array.isArray(prevItems) ? [...prevItems, data] : [data]
+        );
         toast.success("Gallery item added successfully!");
       }
 
@@ -69,8 +99,14 @@ const ManageGallery = () => {
         description: "",
         category: "web",
       });
-      setImage(null);
+      setImages([]); // Reset images array
+      setImagePreviews([]); // Reset previews
       setEditingItem(null);
+
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     } catch (error) {
       console.error("Error adding/updating gallery item:", error);
       toast.error("Failed to add/update gallery item.");
@@ -84,7 +120,8 @@ const ManageGallery = () => {
       description: item.description,
       category: item.category || "web",
     });
-    setImage(null);
+    setImages([]); // Reset images for editing - user will need to re-upload
+    setImagePreviews([]); // Reset previews
   };
 
   const handleDeleteItem = async (id) => {
@@ -92,7 +129,11 @@ const ManageGallery = () => {
       try {
         const token = localStorage.getItem("adminToken");
         await deleteGalleryItem(id, token);
-        setGalleryItems(galleryItems.filter((item) => item._id !== id));
+        setGalleryItems((prevItems) =>
+          Array.isArray(prevItems)
+            ? prevItems.filter((item) => item._id !== id)
+            : []
+        );
         toast.success("Gallery item deleted successfully!");
       } catch (error) {
         console.error("Error deleting gallery item:", error);
@@ -108,7 +149,13 @@ const ManageGallery = () => {
       description: "",
       category: "web",
     });
-    setImage(null);
+    setImages([]);
+    setImagePreviews([]);
+
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   if (loading) {
@@ -157,19 +204,61 @@ const ManageGallery = () => {
             <option value="ai-ml">AI/ML Projects</option>
             <option value="other">Other</option>
           </select>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
-            className="w-full p-3 border border-gray-700 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required={!editingItem}
-          />
+          <div className="flex flex-col">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageChange}
+              className="w-full p-3 border border-gray-700 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required={!editingItem}
+            />
+            <small className="text-gray-400 mt-1">
+              Hold Ctrl/Cmd to select multiple images
+            </small>
+          </div>
         </div>
+
+        {/* Image Previews */}
+        {imagePreviews.length > 0 && (
+          <div className="mt-4">
+            <h5 className="text-lg font-semibold mb-2">Image Previews:</h5>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {imagePreviews.map((preview, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={preview}
+                    alt={`Preview ${index + 1}`}
+                    className="w-full h-32 object-cover rounded-md"
+                  />
+                  <button
+                    onClick={() => {
+                      const newImages = images.filter((_, i) => i !== index);
+                      const newPreviews = imagePreviews.filter(
+                        (_, i) => i !== index
+                      );
+                      setImages(newImages);
+                      setImagePreviews(newPreviews);
+                      URL.revokeObjectURL(preview); // Clean up memory
+                    }}
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="flex gap-4 mt-4">
           <button
             onClick={handleAddOrUpdateItem}
             disabled={
-              !newItem.title || !newItem.description || (!editingItem && !image)
+              !newItem.title ||
+              !newItem.description ||
+              (!editingItem && images.length === 0)
             }
             className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded transition duration-300"
           >
@@ -200,16 +289,23 @@ const ManageGallery = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {galleryItems.map((item) => (
+            {galleryItems?.map((item) => (
               <div
                 key={item._id}
                 className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300"
               >
-                <img
-                  src={getImageUrl(item.image)}
-                  alt={item.title}
-                  className="w-full h-48 object-cover rounded-md mb-4"
-                />
+                <div className="relative">
+                  <img
+                    src={getImageUrl(item.image || item.url)}
+                    alt={item.title}
+                    className="w-full h-48 object-cover rounded-md mb-4"
+                  />
+                  {item.images && item.images.length > 1 && (
+                    <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
+                      +{item.images.length - 1} more
+                    </div>
+                  )}
+                </div>
                 <div className="mb-2">
                   <h3 className="text-lg font-bold mb-2">{item.title}</h3>
                   <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">

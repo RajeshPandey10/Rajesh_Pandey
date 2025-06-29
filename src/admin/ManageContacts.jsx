@@ -30,7 +30,7 @@ const ManageContacts = () => {
     }
 
     try {
-      await replyToContact(selectedContact.email, replyMessage, adminToken);
+      await replyToContact(selectedContact._id, replyMessage, adminToken);
       toast.success(`Reply sent to ${selectedContact.email}`);
       setReplyMessage("");
       setSelectedContact(null); // Close the modal
@@ -68,6 +68,12 @@ const ManageContacts = () => {
             <p className="text-sm text-gray-400 mb-2">
               <span className="font-semibold">Email:</span> {contact.email}
             </p>
+            {contact.subject && (
+              <p className="text-sm text-gray-400 mb-2">
+                <span className="font-semibold">Subject:</span>{" "}
+                {contact.subject}
+              </p>
+            )}
             <p className="text-sm text-gray-400 mb-4">
               <span className="font-semibold">Message:</span> {contact.message}
             </p>
@@ -96,10 +102,16 @@ const ManageContacts = () => {
             <h3 className="text-xl font-bold mb-4">
               Reply to {selectedContact.name}
             </h3>
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-sm text-gray-400 mb-2">
               <span className="font-semibold">Email:</span>{" "}
               {selectedContact.email}
             </p>
+            {selectedContact.subject && (
+              <p className="text-sm text-gray-400 mb-4">
+                <span className="font-semibold">Subject:</span>{" "}
+                {selectedContact.subject}
+              </p>
+            )}
             <textarea
               value={replyMessage}
               onChange={(e) => setReplyMessage(e.target.value)}
