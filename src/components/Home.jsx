@@ -95,7 +95,6 @@ const Home = () => {
       <section className="bg-gradient-to-br from-slate-50 to-blue-50 pt-20 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12 min-h-[80vh]">
-            
             {/* Left Content - Hero Image */}
             <div className="flex-1 flex justify-center lg:justify-start order-1">
               <div className="relative">
@@ -143,8 +142,9 @@ const Home = () => {
                 </p>
                 <p>
                   Currently working as an Associate Backend Developer at Covosys
-                  and MERN Developer and AI/ML trainer at YOUTH IT, I focus on building efficient,
-                  user-friendly solutions that make a difference.
+                  and MERN Developer and AI/ML trainer at YOUTH IT, I focus on
+                  building efficient, user-friendly solutions that make a
+                  difference.
                 </p>
               </div>
 

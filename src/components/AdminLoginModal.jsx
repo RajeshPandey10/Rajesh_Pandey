@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { X, Lock, Mail, Shield } from "lucide-react";
 import { toast } from "react-toastify";
 
+const API_BASE_URL = "http://localhost:4000/api";
+
 const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
   const [step, setStep] = useState(1); // 1: credentials, 2: OTP
   const [formData, setFormData] = useState({
@@ -18,7 +20,7 @@ const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/admin/login`,
+        `${API_BASE_URL}/admin/login`,
         {
           method: "POST",
           headers: {
@@ -53,7 +55,7 @@ const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/admin/verify-otp`,
+        `${API_BASE_URL}/admin/verify-otp`,
         {
           method: "POST",
           headers: {
