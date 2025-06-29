@@ -1,5 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import ManageProjects from "./ManageProjects";
 import ManageTestimonials from "./ManageTestimonials";
 import ManageGallery from "./ManageGallery";
@@ -26,16 +32,16 @@ const AdminDashboard = () => {
   const handleLogout = () => {
     // Clear all localStorage items
     localStorage.clear();
-    
+
     // Call the logout function from context
     logout();
-    
+
     // Show success message
     toast.success("Logged out successfully!", {
       position: "top-right",
       autoClose: 2000,
     });
-    
+
     // Redirect to home page after a short delay
     setTimeout(() => {
       navigate("/");
