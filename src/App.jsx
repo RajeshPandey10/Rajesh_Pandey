@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Loader from "./components/Loader";
 import Footer from "./components/Footer";
+import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./admin/AdminDashboard";
 
 const Home = lazy(() => import("./components/Home"));
@@ -39,8 +40,15 @@ const App = () => {
             <Route path="/experience" element={<Experience />} />
             <Route path="/contact" element={<Contact />} />
 
-            {/* Admin Routes */}
-            <Route path="/admin/*" element={<AdminDashboard />} />
+            {/* Admin Routes - Protected */}
+            <Route
+              path="/admin/*"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </Suspense>
         <Footer />

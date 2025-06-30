@@ -10,13 +10,12 @@ const ProtectedRoute = ({ children }) => {
     return <Loader />;
   }
 
+  // Redirect to home if not authenticated
   if (!adminToken) {
-    return <Navigate to="/admin/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return children;
 };
 
 export default ProtectedRoute;
-
-// (Removed all admin panel references. This file is now deprecated and not used in the new minimal portfolio.)
