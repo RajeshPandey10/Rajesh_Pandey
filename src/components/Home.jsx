@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { fetchTestimonials, fetchGallery } from "../services/api";
 import heroPhoto from "../assets/rajesh-pandeu.png";
+import SocialIcons from "./SocialIcons";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -204,7 +205,7 @@ const Home = () => {
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <button
                   onClick={handleHireMeClick}
                   className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
@@ -217,6 +218,12 @@ const Home = () => {
                 >
                   View Resume
                 </button>
+              </div>
+
+              {/* Social Media Icons */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <p className="text-gray-600 font-medium">Connect with me:</p>
+                <SocialIcons />
               </div>
             </div>
           </div>
@@ -235,10 +242,10 @@ const Home = () => {
               </p>
               <p className="text-sm text-gray-500">
                 "You have the right to perform your actions, but not to the
-                fruits of those actions. 
+                fruits of those actions.
                 <br />
-                Let not the fruits of action be your
-                motive, nor let your attachment be to inaction."
+                Let not the fruits of action be your motive, nor let your
+                attachment be to inaction."
               </p>
             </div>
           </div>

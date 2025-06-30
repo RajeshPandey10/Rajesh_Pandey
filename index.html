@@ -574,7 +574,7 @@
         Reject
       </button>
     </div>
-
+<!-- 
     <script>
       // Initialize cookie consent object
       window.cookieConsent = window.cookieConsent || {
@@ -585,41 +585,6 @@
 
       // Cookie consent functions
       function acceptCookies() {
-        // Ensure cookieConsent object exists
-        if (!window.cookieConsent) {
-          window.cookieConsent = {
-            necessary: true,
-            analytics: false,
-            advertising: false,
-          };
-        }
-
-        window.cookieConsent.advertising = true;
-        window.cookieConsent.analytics = true;
-        localStorage.setItem(
-          "cookieConsent",
-          JSON.stringify(window.cookieConsent)
-        );
-        document.getElementById("cookie-banner").style.display = "none";
-
-        // Load Google Analytics if consent given
-        if (window.cookieConsent.analytics) {
-          loadGoogleAnalytics();
-        }
-
-        // Reload ads if consent given
-        if (window.cookieConsent.advertising && window.adsbygoogle) {
-          setTimeout(() => {
-            try {
-              (window.adsbygoogle = window.adsbygoogle || []).push({});
-            } catch (e) {
-              console.warn("Error reloading ads:", e);
-            }
-          }, 1000);
-        }
-      }
-
-      function rejectCookies() {
         // Ensure cookieConsent object exists
         if (!window.cookieConsent) {
           window.cookieConsent = {
@@ -680,7 +645,7 @@
           document.getElementById("cookie-banner").style.display = "block";
         }
       }
-    </script>
+    </script> -->
 
     <!-- Ahrefs Analytics -->
     <script

@@ -40,11 +40,20 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    // Remove specific admin items
     localStorage.removeItem("adminToken");
     localStorage.removeItem("adminData");
+
+    // Clear all localStorage (complete logout)
+    localStorage.clear();
+
+    // Reset all auth states
     setAdminToken(null);
     setAdminData(null);
     setIsAuthenticated(false);
+
+    // Force page reload to ensure complete state reset
+    window.location.href = "/";
   };
 
   const value = {
