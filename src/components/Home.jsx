@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { fetchTestimonials, fetchGallery } from "../services/api";
 import heroPhoto from "../assets/rajesh-pandeu.png";
-import SocialIcons from "./SocialIcons";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -44,13 +43,10 @@ const Home = () => {
           fetchGallery(1, 20), // Load more gallery items
         ]);
 
-        setTestimonials(testimonialsData || []);
-        setGallery(galleryData.items || galleryData || []); // Handle paginated response
+        setTestimonials(testimonialsData);
+        setGallery(galleryData.items || galleryData); // Handle paginated response
       } catch (error) {
         console.error("Error loading data:", error);
-        // Set empty arrays as fallback instead of mock data
-        setTestimonials([]);
-        setGallery([]);
       } finally {
         setLoading(false);
       }
@@ -208,7 +204,7 @@ const Home = () => {
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={handleHireMeClick}
                   className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
@@ -222,12 +218,6 @@ const Home = () => {
                   View Resume
                 </button>
               </div>
-
-              {/* Social Media Icons */}
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                <p className="text-gray-600 font-medium">Connect with me:</p>
-                <SocialIcons />
-              </div>
             </div>
           </div>
         </div>
@@ -240,11 +230,15 @@ const Home = () => {
           <div className="text-center mb-16">
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 shadow-lg border border-blue-100 max-w-4xl mx-auto">
               <p className="text-xl text-gray-700 italic mb-3 font-serif">
-                "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।"
+                "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन। मा कर्मफलहेतुर्भूर्मा ते
+                सङ्गोऽस्त्वकर्मणि॥"
               </p>
               <p className="text-sm text-gray-500">
-                "You have the right to perform your actions, but never to the
-                fruits of action."
+                "You have the right to perform your actions, but not to the
+                fruits of those actions. 
+                <br />
+                Let not the fruits of action be your
+                motive, nor let your attachment be to inaction."
               </p>
             </div>
           </div>
@@ -293,78 +287,76 @@ const Home = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-              {gallery &&
-                gallery.length > 0 &&
-                getCurrentPageGallery().map((item) => (
-                  <div
-                    key={item?.id || `gallery-${Math.random()}`}
-                    className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 flex flex-col h-[520px]"
-                    onClick={() => openGalleryModal(item)}
-                  >
-                    {/* Image Container */}
-                    <div className="relative h-64 overflow-hidden">
-                      <img
-                        src={item.images ? item.images[0] : item.image}
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+              {getCurrentPageGallery().map((item) => (
+                <div
+                  key={item.id}
+                  className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 flex flex-col h-[520px]"
+                  onClick={() => openGalleryModal(item)}
+                >
+                  {/* Image Container */}
+                  <div className="relative h-64 overflow-hidden">
+                    <img
+                      src={item.images ? item.images[0] : item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
 
-                      {/* Image Count Badge */}
-                      {item.images && item.images.length > 1 && (
-                        <div className="absolute top-3 right-3 px-2 py-1 bg-black/70 backdrop-blur-sm rounded-full text-white text-xs font-medium">
-                          +{item.images.length}
-                        </div>
-                      )}
-
-                      {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-                        <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-75 group-hover:scale-100">
-                          <ExternalLink className="w-5 h-5 text-gray-700" />
-                        </div>
+                    {/* Image Count Badge */}
+                    {item.images && item.images.length > 1 && (
+                      <div className="absolute top-3 right-3 px-2 py-1 bg-black/70 backdrop-blur-sm rounded-full text-white text-xs font-medium">
+                        +{item.images.length}
                       </div>
-                    </div>
+                    )}
 
-                    {/* Content Section - Fixed proportions */}
-                    <div className="p-6 flex-1 flex flex-col">
-                      <h3 className="font-bold text-gray-900 text-xl mb-3 line-clamp-2">
-                        {item.title}
-                      </h3>
-
-                      {item.description && (
-                        <div className="flex-1 mb-4">
-                          <div className="h-40 overflow-y-auto pr-2 border border-gray-100 rounded-lg p-3 bg-gray-50">
-                            <p className="text-gray-700 text-sm leading-snug whitespace-pre-line">
-                              {item.description}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-200 mt-auto">
-                        <span className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full capitalize">
-                          {item.category}
-                        </span>
-
-                        {item.images && item.images.length > 1 && (
-                          <span className="text-gray-500 text-xs font-medium">
-                            {item.images.length} photos
-                          </span>
-                        )}
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                      <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-75 group-hover:scale-100">
+                        <ExternalLink className="w-5 h-5 text-gray-700" />
                       </div>
                     </div>
                   </div>
-                ))}
+
+                  {/* Content Section - Fixed proportions */}
+                  <div className="p-6 flex-1 flex flex-col">
+                    <h3 className="font-bold text-gray-900 text-xl mb-3 line-clamp-2">
+                      {item.title}
+                    </h3>
+
+                    {item.description && (
+                      <div className="flex-1 mb-4">
+                        <div className="h-40 overflow-y-auto pr-2 border border-gray-100 rounded-lg p-3 bg-gray-50">
+                          <p className="text-gray-700 text-sm leading-snug whitespace-pre-line">
+                            {item.description}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-200 mt-auto">
+                      <span className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full capitalize">
+                        {item.category}
+                      </span>
+
+                      {item.images && item.images.length > 1 && (
+                        <span className="text-gray-500 text-xs font-medium">
+                          {item.images.length} photos
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
 
             {/* Gallery Page Indicators */}
-            {gallery && gallery.length > IMAGES_PER_PAGE && (
+            {gallery.length > IMAGES_PER_PAGE && (
               <div className="flex flex-col items-center gap-4 mt-10">
                 <div className="flex justify-center items-center gap-2">
                   {Array.from({
                     length: Math.ceil(gallery.length / IMAGES_PER_PAGE),
                   }).map((_, index) => (
                     <button
-                      key={`gallery-page-${index}`}
+                      key={index}
                       onClick={() => setCurrentGalleryPage(index)}
                       className={`w-4 h-4 rounded-full transition-all duration-300 ${
                         index === currentGalleryPage
@@ -438,19 +430,17 @@ const Home = () => {
                     <ArrowLeft className="w-5 h-5" />
                   </button>
                   <div className="flex gap-2">
-                    {testimonials &&
-                      testimonials.length > 0 &&
-                      testimonials.map((_, index) => (
-                        <button
-                          key={`testimonial-${index}`}
-                          onClick={() => setCurrentTestimonial(index)}
-                          className={`w-3 h-3 rounded-full transition-colors ${
-                            index === currentTestimonial
-                              ? "bg-blue-600"
-                              : "bg-blue-200"
-                          }`}
-                        />
-                      ))}
+                    {testimonials.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentTestimonial(index)}
+                        className={`w-3 h-3 rounded-full transition-colors ${
+                          index === currentTestimonial
+                            ? "bg-blue-600"
+                            : "bg-blue-200"
+                        }`}
+                      />
+                    ))}
                   </div>
                   <button
                     onClick={nextTestimonial}
@@ -538,21 +528,20 @@ const Home = () => {
                     {currentImageIndex + 1} of {selectedImage.images.length}
                   </p>
                   <div className="flex gap-1">
-                    {selectedImage.images &&
-                      selectedImage.images.map((_, index) => (
-                        <button
-                          key={`modal-dot-${index}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCurrentImageIndex(index);
-                          }}
-                          className={`w-2 h-2 rounded-full transition-colors ${
-                            index === currentImageIndex
-                              ? "bg-white"
-                              : "bg-white/40"
-                          }`}
-                        />
-                      ))}
+                    {selectedImage.images.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCurrentImageIndex(index);
+                        }}
+                        className={`w-2 h-2 rounded-full transition-colors ${
+                          index === currentImageIndex
+                            ? "bg-white"
+                            : "bg-white/40"
+                        }`}
+                      />
+                    ))}
                   </div>
                 </div>
               )}
@@ -563,7 +552,7 @@ const Home = () => {
               <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2 bg-black/50 backdrop-blur-sm rounded-lg p-2 max-w-xs overflow-x-auto">
                 {selectedImage.images.map((img, index) => (
                   <button
-                    key={`thumbnail-${index}`}
+                    key={index}
                     onClick={(e) => {
                       e.stopPropagation();
                       setCurrentImageIndex(index);
