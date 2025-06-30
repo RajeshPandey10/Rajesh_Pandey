@@ -273,7 +273,7 @@ const Home = () => {
                     className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-300"
                   >
                     <ArrowLeft className="w-4 h-4" />
-                    Previous
+                    Prev
                   </button>
 
                   <div className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg font-medium">
@@ -518,17 +518,17 @@ const Home = () => {
 
             {/* Image Info */}
             <div className="bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg absolute bottom-0 left-0 right-0">
-              <h3 className="text-white text-xl font-semibold mb-2">
+              <h3 className="text-white text-xl font-semibold hidden md:block">
                 {selectedImage.title}
               </h3>
               <p className="text-gray-300 capitalize mb-2">
                 {selectedImage.category}
               </p>
-              {selectedImage.description && (
+              {/* {selectedImage.description && (
                 <p className="text-gray-400 text-sm mb-3">
                   {selectedImage.description}
                 </p>
-              )}
+              )} */}
               {selectedImage.images && selectedImage.images.length > 1 && (
                 <div className="flex items-center gap-4">
                   <p className="text-gray-300 text-sm">
@@ -556,7 +556,7 @@ const Home = () => {
 
             {/* Thumbnail Navigation (for multiple images) */}
             {selectedImage.images && selectedImage.images.length > 1 && (
-              <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2 bg-black/50 backdrop-blur-sm rounded-lg p-2 max-w-xs overflow-x-auto">
+              <div className="absolute  left-1/2 -translate-x-1/2 flex gap-2 bg-black/50 backdrop-blur-sm rounded-lg p-2 max-w-xs overflow-x-auto">
                 {selectedImage.images.map((img, index) => (
                   <button
                     key={index}
