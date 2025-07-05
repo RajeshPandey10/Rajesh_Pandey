@@ -10,9 +10,8 @@ const ProtectedRoute = ({ children }) => {
     return <Loader />;
   }
 
-  // Redirect to home if not authenticated
   if (!adminToken) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/admin/login" replace />;
   }
 
   return children;

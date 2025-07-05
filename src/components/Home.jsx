@@ -30,8 +30,8 @@ const Home = () => {
   const handleViewResumeClick = () => {
     // Create a download link for the resume
     const link = document.createElement("a");
-    link.href = "/assets/RajeshPandey-Resume.pdf"; // Path to your resume in public folder
-    link.download = "RajeshPandey-Resume.pdf";
+    link.href = "assets/Resume_Rajesh_pandey.pdf"; // Path to your resume in public folder
+    link.download = "RajeshPandey_Resume";
     link.click();
   };
   // Fetch data from backend
