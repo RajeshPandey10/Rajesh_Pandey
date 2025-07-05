@@ -18,7 +18,7 @@ const AdminDashboard = lazy(() => import("./admin/AdminDashboard"));
 const ManageProjects = lazy(() => import("./admin/ManageProjects"));
 const ManageContacts = lazy(() => import("./admin/ManageContacts"));
 const ManageTestimonials = lazy(() => import("./admin/ManageTestimonials"));
-const Login = lazy(() => import("./admin/Login"));
+
 
 const App = () => {
   const location = useLocation();
@@ -48,8 +48,7 @@ const App = () => {
               <Route path="/experience" element={<Experience />} />
               <Route path="/contact" element={<Contact />} />
 
-              {/* Admin Routes */}
-              <Route path="/admin/login" element={<Login />} />
+           
               <Route
                 path="/admin"
                 element={
