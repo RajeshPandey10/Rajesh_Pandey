@@ -7,6 +7,7 @@ import Loader from "./components/Loader";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Footer from "./components/Footer";
+import ManageGallery from "./admin/ManageGallery";
 
 const Home = lazy(() => import("./components/Home"));
 const Skills = lazy(() => import("./components/Skill"));
@@ -62,6 +63,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <ManageProjects />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/gallery"
+                element={
+                  <ProtectedRoute>
+                    <ManageGallery />
                   </ProtectedRoute>
                 }
               />
