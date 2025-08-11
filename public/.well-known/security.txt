@@ -1,0 +1,4 @@
+Contact: mailto:imrajesh2005@gmail.com
+Expires: 2026-05-29T00:00:00.000Z
+Preferred-Languages: en, ne
+Canonical: https://rajeshpandey10.com.np/.well-known/security.txt
