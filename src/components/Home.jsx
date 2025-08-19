@@ -1164,8 +1164,7 @@ const Home = () => {
                     {testimonials.length > 1 && (
                       <div className="mt-4 text-center">
                         <p className="text-xs text-gray-500">
-                          {isPaused ? "Paused" : "Auto-playing"} • Hover to
-                          pause
+                          {isPaused ? "Paused - Hover to play " : "Auto-playing - Hover to Pause"}
                         </p>
                       </div>
                     )}
