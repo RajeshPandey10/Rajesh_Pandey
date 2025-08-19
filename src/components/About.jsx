@@ -45,7 +45,7 @@ const About = () => {
                     🚀 MERN Stack Developer & AI/ML Trainer
                   </p>
                   <p className="text-slate-600 text-sm">
-                    YOUTHIT, Pragati Chowk, Itahari
+                    YOUTH IT, Pragati Chowk, Itahari
                   </p>
                 </div>
                 <div className="p-4 bg-green-50 rounded-xl border border-green-100">
@@ -53,6 +53,12 @@ const About = () => {
                     🎯 Associate Backend Developer
                   </p>
                   <p className="text-slate-600 text-sm">Covosys (Remote)</p>
+                </div>
+                <div className="p-4 bg-green-50 rounded-xl border border-green-100">
+                  <p className="text-lg font-semibold text-green-700 mb-2">
+                    🎯 FreeLancer since 2022
+                  </p>
+                  <p className="text-slate-600 text-sm">Self-employed</p>
                 </div>
              
               </div>
