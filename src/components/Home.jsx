@@ -90,6 +90,19 @@ const TypewriterEffect = ({ words }) => {
   const [currentWord, setCurrentWord] = useState(0);
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isMuted, setIsMuted] = useState(() => {
+    const stored = localStorage.getItem("typewriterMuted");
+    return stored === "true";
+  });
+  const audioRef = useRef(null);
+
+  // Load the typing sound once
+  useEffect(() => {
+    if (!audioRef.current) {
+      audioRef.current = new window.Audio("/assets/keyboard-type.mp3");
+      audioRef.current.volume = 0.3;
+    }
+  }, []);
 
   useEffect(() => {
     const timeout = setTimeout(
@@ -97,13 +110,41 @@ const TypewriterEffect = ({ words }) => {
         const word = words[currentWord];
 
         if (!isDeleting) {
-          setCurrentText(word.substring(0, currentText.length + 1));
+          setCurrentText((prevText) => {
+            // Play sound only when adding a character and not muted
+            if (
+              word.substring(0, prevText.length + 1) !== prevText &&
+              audioRef.current
+            ) {
+              if (!isMuted) {
+                audioRef.current.currentTime = 0;
+                audioRef.current.play();
+              } else {
+                audioRef.current.pause();
+              }
+            }
+            return word.substring(0, prevText.length + 1);
+          });
 
           if (currentText === word) {
             setTimeout(() => setIsDeleting(true), 1500);
           }
         } else {
-          setCurrentText(word.substring(0, currentText.length - 1));
+          setCurrentText((prevText) => {
+            // Play sound only when deleting a character and not muted
+            if (
+              word.substring(0, prevText.length - 1) !== prevText &&
+              audioRef.current
+            ) {
+              if (!isMuted) {
+                audioRef.current.currentTime = 0;
+                audioRef.current.play();
+              } else {
+                audioRef.current.pause();
+              }
+            }
+            return word.substring(0, prevText.length - 1);
+          });
 
           if (currentText === "") {
             setIsDeleting(false);
@@ -115,12 +156,66 @@ const TypewriterEffect = ({ words }) => {
     );
 
     return () => clearTimeout(timeout);
-  }, [currentText, currentWord, isDeleting, words]);
+  }, [currentText, currentWord, isDeleting, words, isMuted]);
+
+  // Mute/unmute handler
+  const handleMuteToggle = () => {
+    setIsMuted((prev) => {
+      localStorage.setItem("typewriterMuted", !prev);
+      return !prev;
+    });
+  };
 
   return (
-    <span className="text-blue-600">
+    <span className="text-blue-600 relative">
       {currentText}
       <span className="animate-pulse">|</span>
+      <button
+        onClick={handleMuteToggle}
+        style={{
+          position: "absolute",
+          right: -32,
+          top: 0,
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          outline: "none",
+          padding: 0,
+        }}
+        aria-label={isMuted ? "Unmute typing sound" : "Mute typing sound"}
+        title={isMuted ? "Unmute typing sound" : "Mute typing sound"}
+      >
+        {isMuted ? (
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        ) : (
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19 9v6a2 2 0 0 1-2 2h-2"></path>
+          </svg>
+        )}
+      </button>
     </span>
   );
 };
