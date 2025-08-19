@@ -1,6 +1,11 @@
-# SEO and Performance Optimizations for Rajesh Pandey Portfolio
+# Apache configuration for Rajesh Pandey Portfolio
+RewriteEngine On
 
-# Enable compression
+# Redirect HTTP to HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Compress files
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/plain
     AddOutputFilterByType DEFLATE text/html
@@ -13,61 +18,22 @@
     AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
 
-# Set proper MIME types
-<IfModule mod_mime.c>
-    AddType application/javascript .js
-    AddType text/css .css
-    AddType image/x-icon .ico
-    AddType application/json .json
-    AddType application/manifest+json .webmanifest
-</IfModule>
-
-# Browser caching
+# Cache static files
 <IfModule mod_expires.c>
-    ExpiresActive On
+    ExpiresActive on
     ExpiresByType text/css "access plus 1 year"
     ExpiresByType application/javascript "access plus 1 year"
     ExpiresByType image/png "access plus 1 year"
     ExpiresByType image/jpg "access plus 1 year"
     ExpiresByType image/jpeg "access plus 1 year"
     ExpiresByType image/gif "access plus 1 year"
-    ExpiresByType image/ico "access plus 1 year"
-    ExpiresByType image/x-icon "access plus 1 year"
-    ExpiresByType application/pdf "access plus 1 year"
-    ExpiresByType text/html "access plus 1 day"
-    ExpiresByType application/json "access plus 1 day"
+    ExpiresByType image/svg+xml "access plus 1 year"
 </IfModule>
 
 # Security headers
 <IfModule mod_headers.c>
-    Header always set X-Content-Type-Options "nosniff"
-    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
 </IfModule>
-
-# URL Redirects for SEO
-RewriteEngine On
-
-# Force HTTPS
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Force www removal (canonical URL)
-RewriteCond %{HTTP_HOST} ^www\.rajeshpandey10\.com\.np [NC]
-RewriteRule ^(.*)$ https://rajeshpandey10.com.np/$1 [L,R=301]
-
-# Handle React Router
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.html [L]
-
-# Error pages
-ErrorDocument 404 /index.html
-
-# Prevent access to sensitive files
-<Files ~ "\.(htaccess|htpasswd|ini|log|sh|sql|txt)$">
-    Order Allow,Deny
-    Deny from all
-</Files>

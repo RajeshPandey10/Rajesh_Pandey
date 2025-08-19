@@ -1,8 +1,10 @@
+# Robots.txt for Rajesh Pandey Portfolio
+# Enhanced for better SEO crawling
+
 User-agent: *
 Allow: /
-Crawl-delay: 1
 
-# Allow all major search engines
+# Allow major search engines
 User-agent: Googlebot
 Allow: /
 
@@ -15,14 +17,38 @@ Allow: /
 User-agent: DuckDuckBot
 Allow: /
 
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
 User-agent: facebookexternalhit
 Allow: /
 
 User-agent: Twitterbot
 Allow: /
 
+User-agent: LinkedInBot
+Allow: /
+
+# Disallow sensitive areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /.env
+Disallow: /node_modules/
+
+# Allow media files
+Allow: /*.css
+Allow: /*.js
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.pdf
+
 # Sitemap location
 Sitemap: https://rajeshpandey10.com.np/sitemap.xml
 
-# Host preference
-Host: rajeshpandey10.com.np
+# Crawl delay
+Crawl-delay: 1
+Revisit-after: 7 days
