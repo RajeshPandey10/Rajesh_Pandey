@@ -1,6 +1,5 @@
-// ...existing code...
-// Home.jsx
-import React, {
+
+import  {
   useState,
   useEffect,
   useMemo,
@@ -173,8 +172,8 @@ const TypewriterEffect = ({ words }) => {
       <button
         onClick={handleMuteToggle}
         style={{
-          position: "absolute",
-          right: -32,
+          position: "relative",
+          left: 0,
           top: 0,
           background: "none",
           border: "none",
