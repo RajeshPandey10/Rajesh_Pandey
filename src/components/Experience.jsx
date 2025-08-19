@@ -4,10 +4,10 @@ import { MapPin, Calendar, ExternalLink, Briefcase, Award } from "lucide-react";
 const Experience = () => {
   const experiences = [
     {
-      company: "YOUTHIT",
+      company: "YOUTH IT",
       position: "MERN Stack Developer & AI/ML Instructor/Trainer",
       location: "Pragati Chowk, Itahari",
-      duration: "1 Month (Current)",
+      duration: "3 Month",
       description:
         "Leading full-stack development projects using MERN stack while training aspiring developers in modern web technologies and AI/ML fundamentals. Developing innovative solutions and mentoring students in practical programming skills.",
       current: true,
@@ -19,7 +19,7 @@ const Experience = () => {
       duration: "7 Months",
       description:
         "Developed and maintained backend services using Node.js and Express. Integrated third-party APIs and optimized database queries. Built RESTful APIs for web applications with focus on scalability and performance.",
-      current: false,
+      current: true,
     },
     {
       company: "Lunar IT",
