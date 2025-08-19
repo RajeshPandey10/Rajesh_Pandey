@@ -59,12 +59,12 @@ const generateSitemap = () => {
     if (page.url === "/") {
       sitemap += `
     <image:image>
-      <image:loc>${baseUrl}/assets/mymainphoto.png</image:loc>
+      <image:loc>${baseUrl}/assets/myimg-C_JnkhJR.png</image:loc>
       <image:title>Rajesh Pandey - Full Stack Web Developer</image:title>
       <image:caption>Professional photo of Rajesh Pandey, Full Stack Web Developer from Nepal</image:caption>
     </image:image>
     <image:image>
-      <image:loc>${baseUrl}/assets/my2photo.jpeg</image:loc>
+      <image:loc>${baseUrl}/assets/myimg-C_JnkhJR.png</image:loc>
       <image:title>Rajesh Pandey Profile Picture</image:title>
       <image:caption>Rajesh Pandey - MERN Stack Developer and Computer Engineering Student</image:caption>
     </image:image>`;
