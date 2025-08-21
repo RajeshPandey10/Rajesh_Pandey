@@ -7,7 +7,7 @@ const Footer = () => {
     window.location.href = "mailto:imrajesh2005@gmail.com";
   };
   return (
-    <footer className="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 text-gray-800 py-16 border-t border-amber-200/60 relative overflow-hidden">
+    <footer className="bg-[#F4F8FE]  text-gray-800 py-16 border-t border-amber-200/60 relative overflow-hidden">
       {/* Subtle Background Pattern */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-100/20 to-transparent"></div>
 
