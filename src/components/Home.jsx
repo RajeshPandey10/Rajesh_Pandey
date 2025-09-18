@@ -98,7 +98,7 @@ const TypewriterEffect = ({ words }) => {
   // Load the typing sound once
   useEffect(() => {
     if (!audioRef.current) {
-      audioRef.current = new window.Audio("/assets/keyboard-type.mp3");
+      audioRef.current = new window.Audio("/assets/keyboardsoundremove");
       audioRef.current.volume = 0.3;
     }
   }, []);
