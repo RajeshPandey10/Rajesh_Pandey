@@ -2,6 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/nepoprod/public_html/himaloom/
+    - /bin/rm -rf $DEPLOYPATH/*
     - npm install
     - npm run build
     - /bin/cp -R dist/* $DEPLOYPATH
