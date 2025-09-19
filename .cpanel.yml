@@ -1,8 +1,17 @@
 ---
 deployment:
   tasks:
+    # Deployment path for your addon domain
     - export DEPLOYPATH=/home/nepoprod/public_html/himaloom/
+    
+    # Remove old files
     - /bin/rm -rf $DEPLOYPATH/*
-    - npm install
-    - npm run build
+    
+    # Install dependencies
+    - /usr/local/bin/npm install
+    
+    # Build Vite project
+    - /usr/local/bin/npm run build
+    
+    # Copy built files to public_html
     - /bin/cp -R dist/* $DEPLOYPATH
